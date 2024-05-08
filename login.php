@@ -15,7 +15,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/x-icon" href="image/favicon.ico">
-    <title>LOGIN | Amarasinghe Tyre Traders Point of Sale System</title>
+    <title>LOGIN | TOP Brewery  Point of Sale System</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <script src="./js/jquery-3.6.0.min.js"></script>
     <script src="./js/popper.min.js"></script>
@@ -40,8 +40,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 <body>
    <div class="h-100 d-flex jsutify-content-center align-items-center">
        <div class='w-100'>
-       <span><center><img src="image\dha.png" width="500" height="150"></center></span><br>
-        <h3 class="bg-dark bg-opacity-75 text-bold py-5 text-center text-light">Amarasinghe Tyre Traders Point of Sale System</h3>
+       <!-- <span><center><img src="image\dha.png" width="500" height="150"></center></span><br> -->
+        <h3 class="bg-dark bg-opacity-75 text-bold py-5 text-center text-light">TOP Brewery Point Of Sale System</h3>
         <div class="card my-3 col-md-4 offset-md-4">
             <div class="card-body">
                 <form action="" id="login-form">

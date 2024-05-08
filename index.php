@@ -133,7 +133,7 @@ if($_SESSION['type'] != 1 && in_array($page,array('maintenance','products','stoc
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient" id="topNavBar">
         <div class="container">
             <a class="navbar-brand" href="./">
-            ATT POS
+            TB POS
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -156,15 +156,15 @@ if($_SESSION['type'] != 1 && in_array($page,array('maintenance','products','stoc
                     <li class="nav-item">
                         <a class="nav-link" href="./?page=maintenance">Maintenance</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="./?page=client">Credit Client</a>
-                    </li>
+                    </li> -->
                     <?php endif; ?>
                     
                     <li class="nav-item">
                         <a class="nav-link  <?php echo ($page == 'sales_report')? 'active' : '' ?>" href="./?page=sales_report">Sales</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link  <?php echo ($page == 'crsales_report')? 'active' : '' ?>" href="./?page=crsales_report">CR Sales</a>
                     </li>
                     <li class="nav-item">
@@ -172,9 +172,9 @@ if($_SESSION['type'] != 1 && in_array($page,array('maintenance','products','stoc
                     </li>
                     <li class="nav-item">
                         <a class="nav-link  <?php echo ($page == 'cr_sales')? 'active' : '' ?>" href="./?page=cr_sales">CR POS</a>
-                        </li>
+                        </li> -->
                     <?php if($_SESSION['type'] == 0): ?>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                         <a class="nav-link  <?php echo ($page == 'sales')? 'active' : '' ?>" href="./?page=sales">POS</a>
                         </li>
                         <li class="nav-item">
@@ -188,7 +188,7 @@ if($_SESSION['type'] != 1 && in_array($page,array('maintenance','products','stoc
                         </li>
                         <li class="nav-item">
                         <a class="nav-link  <?php echo ($page == 'cr_sales')? 'active' : '' ?>" href="./?page=cr_sales">CR POS</a>
-                        </li>
+                        </li> -->
 
                     <?php endif; ?>
                     

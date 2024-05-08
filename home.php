@@ -1,4 +1,4 @@
-<h3>Amarasinghe Tyre Traders Point of Sale System</h3>
+<h3>TOP Brewery Point Of Sale System</h3>
 <hr>
 <div class="col-12">
     <div class="row gx-4 row-cols-md-4">
