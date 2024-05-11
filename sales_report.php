@@ -32,8 +32,9 @@ $dto = isset($_GET['date_to']) ? $_GET['date_to'] : date("Y-m-d");
             <colgroup>
                 <col width="5%">
                 <col width="10%">
-                <col width="15%">
+                <col width="10%">
                 <col width="5%">
+                <col width="15%">
                 <col width="15%">
                 <col width="15%">
                 <col width="15%">
@@ -46,6 +47,7 @@ $dto = isset($_GET['date_to']) ? $_GET['date_to'] : date("Y-m-d");
                     <th class="text-center p-0">Date</th>
                     <th class="text-center p-0">Receipt No</th>
                     <th class="text-center p-0">Items</th>
+                    <th class="text-center p-0">Method</th>
                     <th class="text-center p-0">Total Amount</th>
                     <th class="text-center p-0">Total Profit</th>
                     <th class="text-center p-0">Amount in arrears</th>
@@ -74,6 +76,7 @@ $dto = isset($_GET['date_to']) ? $_GET['date_to'] : date("Y-m-d");
                     <td class="py-0 px-1"><?php echo date("Y-m-d",strtotime($row['date_added'])) ?></td>
                     <td class="py-0 px-1"><a href="javascript:void(0)" class="view_data" data-id="<?php echo $row['transaction_id'] ?>"><?php echo $row['receipt_no'] ?></a></td>
                     <td class="py-0 px-1 text-end"><?php echo number_format($items) ?></td>
+                    <td class="py-0 px-1 text-end"><?php echo $row['customer'] ?></td>
                     <td class="py-0 px-1 text-end"><?php echo number_format($row['total'],2) ?></td>
                     <td class="py-0 px-1 text-end"><?php echo number_format($row['t_profit'],2) ?></td>
                     <td class="py-0 px-1 text-end"><?php echo number_format($row['arrears'],2) ?></td>

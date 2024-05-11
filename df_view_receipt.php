@@ -33,10 +33,10 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
 <div class="container-fluid">
     <div id="outprint_receipt">
         <div class="text-center fs-6 fs-bold">
-            <span><img src="image\logoabc.png" width='250' height='100'></span><br>
-            <span><h3 class="fw-bold">Top Brewery</h1></span>
-            <small style="line-height:normal;" class="fw-bold">Tel : +60196000671</small><br>
-            <small style="line-height:normal;" class="fw-bold ">E-mail : topbrewery@gmail.com</small><br>
+            <!-- <span><img src="image\logoabc.png" width='250' height='100'></span><br> -->
+            <!-- <span><h3 class="fw-bold">Amarasinghe Tyre Traders</h1></span> -->
+            <!-- <small style="line-height:normal;" class="fw-bold">Tel : 077 9939697 | 011 2235863</small><br>
+            <small style="line-height:normal;" class="fw-bold ">E-mail : amarasinghetyres@gmail.com</small><br> -->
         </div>
         <table class="table table-striped">
             <colgroup>
@@ -45,11 +45,10 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
             </colgroup>  
             <thead>
             <tr class="text-dark">
-                <th colspan="2" class="py-0 px-1" style="font-size: small; text-align: center;"><small class="fw-bold">Top Brewery</small><br>
-                    <small class="fw-bold">48-Bg jalan pandan cahaya 2/2</small><br>
-                    <small class="fw-bold">Ampang,selangor 68000</small>
+                <!-- <th class="py-0 px-1" style="font-size: small; text-align: center;"><small class="fw-bold">Seeduwa Branch</small><br>
+                    <small class="fw-bold">No 375B,Liyanagemulla,Seeduwa</small>
                 </th>
-                <!-- <th class="py-0 px-1" style="font-size: small; text-align: center;"><small class="fw-bold">Bopitiya Branch<br>
+                <th class="py-0 px-1" style="font-size: small; text-align: center;"><small class="fw-bold">Bopitiya Branch<br>
                     <small class="fw-bold">No 115/5/A,Bopitiya,Pamunugama</small>
                 </th> -->
             </tr>
