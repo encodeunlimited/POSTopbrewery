@@ -51,7 +51,7 @@
                             Action
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <!-- <li><a class="dropdown-item view_data" data-id = '<?php echo $row['stock_id'] ?>' href="javascript:void(0)">View Details</a></li> -->
+                            <li><a class="dropdown-item view_data" data-id = '<?php echo $row['stock_id'] ?>' href="javascript:void(0)">View Details</a></li>
                             <li><a class="dropdown-item edit_data" data-id = '<?php echo $row['stock_id'] ?>' href="javascript:void(0)">Edit</a></li>
                             <li><a class="dropdown-item delete_data" data-id = '<?php echo $row['stock_id'] ?>' data-name = '<?php echo $row['product_code']." - ".$row['pname'] ?>' href="javascript:void(0)">Delete</a></li>
                             </ul>

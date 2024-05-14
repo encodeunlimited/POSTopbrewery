@@ -22,7 +22,7 @@
         <div class="w-100 h-100 mx-0 row row-cols-2 bg-dark">
             <div class="col-8 h-100 pb-2 d-flex flex-column">
                 <div>
-                    <h3 class="text-light">Please select retail tyres below</h3>
+                    <h3 class="text-light">Please select Items below</h3>
                 </div>
                 <div class="flex-grow-1 d-flex flex-column bg-light bg-opacity-50">
                     <div class="form-group py-2 d-flex border-bottom">
