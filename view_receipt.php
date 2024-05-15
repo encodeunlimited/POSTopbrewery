@@ -197,6 +197,8 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
             _conf("Are you sure to delete <b>"+<?php echo $receipt_no ?>+"</b>?",'delete_data',['<?php echo $transaction_id ?>'])
         })
     })
+
+    
     function delete_data($id){
         $('#confirm_modal button').attr('disabled',true)
         $.ajax({

@@ -64,7 +64,7 @@
                                      </colgroup>
                                      <tbody>
                                 <?php 
-                                $sql = "SELECT p.*,c.name as cname FROM `product_list` p inner join `category_list` c on p.category_id = c.category_id where p.status = 1 AND p.category_id NOT IN (206, 207, 209) order by `name` asc";
+                                $sql = "SELECT p.*,c.name as cname FROM `product_list` p inner join `category_list` c on p.category_id = c.category_id where p.status = 1 order by `name` asc";
                                 $qry = $conn->query($sql);
                                 while($row = $qry->fetchArray()):
                                     $stock_in = $conn->query("SELECT sum(quantity) as `total` FROM `stock_list` where strftime('%s',`expiry_date` || '23:59:59') >= strftime('%s',CURRENT_TIMESTAMP) and product_id = '{$row['product_id']}' ")->fetchArray()['total'];

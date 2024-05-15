@@ -57,13 +57,17 @@ if ($pay_method == "all") {
                 <div class="col-auto">
                     <button class="btn btn-primary rounded-0" id="filter" type="button"><i class="fa fa-filter"></i> Filter</button>
                     <button class="btn btn-success rounded-0" id="print" type="button"><i class="fa fa-print"></i> Print</button>
+                    <?php if ($_SESSION['type'] == 1) { ?>
+                    <button class="btn btn-dark btn-sm py-1 rounded-0" type="button" id="print_data">Print Data</button>
+                    <?php }  ?>
+
                 </div>
             </div>
         </div>
         <hr>
         <div class="clear-fix mb-2"></div>
         <div id="outprint">
-            <table class="table table-hover table-striped table-bordered">
+            <table class="table table-hover table-striped table-bordered" id="print">
                 <colgroup>
                     <col width="5%">
                     <col width="10%">
@@ -72,9 +76,9 @@ if ($pay_method == "all") {
                     <col width="15%">
                     <col width="15%">
                     <col width="15%">
-                    <col width="15%">
+                    <!-- <col width="15%"> -->
                     <col width="10%">
-                    <col width="10%">
+                    <!-- <col width="10%"> -->
                 </colgroup>
                 <thead>
                     <tr>
@@ -85,9 +89,9 @@ if ($pay_method == "all") {
                         <th class="text-center p-0">Method</th>
                         <th class="text-center p-0">Total Amount</th>
                         <th class="text-center p-0">Total Profit</th>
-                        <th class="text-center p-0">Amount in arrears</th>
+                        <!-- <th class="text-center p-0">Amount in arrears</th> -->
                         <th class="text-center p-0">Processed By</th>
-                        <th class="text-center p-0">Arrears Done</th>
+                        <!-- <th class="text-center p-0">Arrears Done</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -106,7 +110,7 @@ if ($pay_method == "all") {
 
                     $i = 1;
                     while ($row = $qry->fetchArray()) :
-                        $items = $conn->query("SELECT count(transaction_id) as `count` FROM `transaction_items` where transaction_id = '{$row['transaction_id']}'  ")->fetchArray()['count'];
+                        $items = $conn->query("SELECT sum(quantity) as `count` FROM `transaction_items` where transaction_id = '{$row['transaction_id']}'  ")->fetchArray()['count'];
 
                     ?>
 
@@ -118,11 +122,11 @@ if ($pay_method == "all") {
                             <td class="py-0 px-1 text-end"><?php echo $row['customer'] ?></td>
                             <td class="py-0 px-1 text-end"><?php echo number_format($row['total'], 2) ?></td>
                             <td class="py-0 px-1 text-end"><?php echo number_format($row['t_profit'], 2) ?></td>
-                            <td class="py-0 px-1 text-end"><?php echo number_format($row['arrears'], 2) ?></td>
+                            <!-- <td class="py-0 px-1 text-end"><?php echo number_format($row['arrears'], 2) ?></td> -->
                             <td class="py-0 px-1"><?php echo $row['fullname'] ?></td>
-                            <td class="py-0 px-1">
+                            <!-- <td class="py-0 px-1">
                                 <?php echo $row['arrears'] > 0 ? "<a href='javascript:void(0)' class='arrears me-1' data-tid = '" . $row['transaction_id'] . "' data-resno = '" . $row['receipt_no'] . "' data-arrears = '" . $row['arrears'] . "'> Arrears Done</a>" : '' ?>
-                            </td>
+                            </td> -->
                         </tr>
                     <?php
 
@@ -162,15 +166,15 @@ if ($pay_method == "all") {
                                                     echo number_format($t_profit, 2);
                                                     ?>
                     </td>
-                    <td class="px-1 py-0 text-end"><?php
-                                                    if ($_SESSION['type'] == 1) {
-                                                        $arrears = $conn->query("SELECT sum(arrears) as `total_arrears` FROM `transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}' {$pay_query1}")->fetchArray()['total_arrears'];
-                                                    } else {
-                                                        $arrears = $conn->query("SELECT sum(arrears) as `total_arrears` FROM `transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}' {$user_c} {$pay_query1}")->fetchArray()['total_arrears'];
-                                                    }
-                                                    echo number_format($arrears, 2);
-                                                    ?>
-                    </td>
+                    <!-- <td class="px-1 py-0 text-end"><?php
+                                                        if ($_SESSION['type'] == 1) {
+                                                            $arrears = $conn->query("SELECT sum(arrears) as `total_arrears` FROM `transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}' {$pay_query1}")->fetchArray()['total_arrears'];
+                                                        } else {
+                                                            $arrears = $conn->query("SELECT sum(arrears) as `total_arrears` FROM `transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}' {$user_c} {$pay_query1}")->fetchArray()['total_arrears'];
+                                                        }
+                                                        echo number_format($arrears, 2);
+                                                        ?>
+                    </td> -->
                 </tr>
             </table>
         </div>
@@ -190,7 +194,7 @@ if ($pay_method == "all") {
             uni_modal('Receipt', "view_receipt.php?view_only=true&id=" + $(this).attr('data-id'), '')
         })
         $('#filter').click(function() {
-            location.href = "./?page=sales_report&date_from=" + $('#date_from').val() + "&date_to=" + $('#date_to').val() +"&payment_method="+ $('#payment_method').val();
+            location.href = "./?page=sales_report&date_from=" + $('#date_from').val() + "&date_to=" + $('#date_to').val() + "&payment_method=" + $('#payment_method').val();
         })
 
         $('table td,table th').addClass('align-middle')
@@ -218,6 +222,7 @@ if ($pay_method == "all") {
                 }, 150);
             }, 200);
         })
+
         $('table').dataTable({
             columnDefs: [{
                 orderable: false,
@@ -253,4 +258,24 @@ if ($pay_method == "all") {
         })
     }
     /////////////////////////////
+
+    $(document).ready(function() {
+        $('#print_data').click(function() {
+            // Retrieve values of elements
+            var date_from = $('#date_from').val(); // Assuming you have input fields with ids 'date_from' and 'date_to'
+            var date_to = $('#date_to').val();
+            var payment_method = $('#payment_method').val(); // Assuming you have a select element with id 'payment_method'
+
+            // Construct URL with query parameters
+            var url = 'process_data.php?date_from=' + encodeURIComponent(date_from) +
+                '&date_to=' + encodeURIComponent(date_to) +
+                '&payment_method=' + encodeURIComponent(payment_method);
+
+            // Open a new window with the constructed URL
+            var printWindow = window.open(url, '_blank');
+            // printWindow.focus();
+            printWindow.print();
+        });
+    });
+    
 </script>

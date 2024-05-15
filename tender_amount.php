@@ -29,6 +29,7 @@
             <option value="qr">QR</option>
             <option value="online">Online</option>
             <option value="food_panda">Food Panda</option>
+            <option value="card">Card</option>
         </select>
     </div>
 
