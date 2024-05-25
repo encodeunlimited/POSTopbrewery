@@ -20,7 +20,7 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="image/favicon.ico">
-    <title><?php echo ucwords(str_replace('_', '', $page)) ?> | ATT POS</title>
+    <title><?php echo ucwords(str_replace('_', '', $page)) ?> | TB POS</title>
     <link rel="stylesheet" href="./Font-Awesome-master/css/all.min.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <script src="./js/jquery-3.6.0.min.js"></script>
@@ -144,16 +144,23 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
             font-size: 10px;
             padding: 0px 2px !important;
         }
+
+        .body-bg {
+        background-color:bisque;
+    }
     </style>
 </head>
 
-<body>
+<body class="body-bg">
     <main>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient" id="topNavBar">
             <div class="container">
                 <a class="navbar-brand" href="./">
-                    TB POS
+                    DF TB POS
                 </a>
+                <!-- <a class="navbar-brand" href="./">
+                    TB POS
+                </a> -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -289,5 +296,9 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
         </div>
     </div>
 </body>
-
+<footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
+    <div class="container text-center">
+      <small>Copyright &copy; <a href="https://www.encodeunlimited.com/">www.encodeunlimited.com</a></small>
+    </div>
+  </footer>
 </html>
