@@ -1,0 +1,38 @@
+-- Create index on the category_id column in product_list table
+CREATE INDEX idx_product_category ON product_list(category_id);
+
+-- Create index on the category_id column in category_list table
+CREATE INDEX idx_category_id ON category_list(category_id);
+
+-- Create index on the status column in product_list table
+CREATE INDEX idx_product_status ON product_list(status);
+
+-- Create index on the name column in product_list table
+CREATE INDEX idx_product_name ON product_list(name);
+
+REFUND
+
+CREATE TRIGGER move_to_refund_transaction_items
+BEFORE DELETE ON transaction_items
+FOR EACH ROW
+BEGIN
+    INSERT INTO refund_transaction_items (
+        transaction_id, product_id, quantity, discount, price, profit, date_added
+    ) VALUES (
+        OLD.transaction_id, OLD.product_id, OLD.quantity, OLD.discount, OLD.price, OLD.profit, OLD.date_added
+    );
+END;
+
+CREATE TRIGGER move_to_refund_transaction_list
+BEFORE DELETE ON transaction_list
+FOR EACH ROW
+BEGIN
+    INSERT INTO refund_transaction_list (
+        receipt_no, total, t_discount, t_profit, s_desc, tendered_amount, customer, vehical_no, change, arrears, user_id, date_added
+    ) VALUES (
+        OLD.receipt_no, OLD.total, OLD.t_discount, OLD.t_profit, OLD.s_desc, OLD.tendered_amount, OLD.customer, OLD.vehical_no, OLD.change, OLD.arrears, OLD.user_id, OLD.date_added
+    );
+END;
+
+
+table

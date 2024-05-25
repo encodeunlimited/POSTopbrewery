@@ -146,8 +146,8 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
         }
 
         .body-bg {
-        background-color:bisque;
-    }
+            background-color: bisque;
+        }
     </style>
 </head>
 
@@ -182,6 +182,9 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
                             <li class="nav-item">
                                 <a class="nav-link" href="./?page=maintenance">Maintenance</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link  <?php echo ($page == 'refund_report') ? 'active' : '' ?>" href="./?page=refund_report">Refund</a>
+                            </li>
                             <!-- <li class="nav-item">
                         <a class="nav-link" href="./?page=client">Credit Client</a>
                     </li> -->
@@ -202,9 +205,9 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
                         <a class="nav-link  <?php echo ($page == 'cr_sales') ? 'active' : '' ?>" href="./?page=cr_sales">CR POS</a>
                         </li> -->
                         <?php if ($_SESSION['type'] == 0) : ?>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link  <?php echo ($page == 'sales') ? 'active' : '' ?>" href="./?page=sales">POS</a>
-                            </li>
+                            </li> -->
                             <!-- <li class="nav-item">
                         <a class="nav-link  <?php echo ($page == 'who_sales') ? 'active' : '' ?>" href="./?page=who_sales">WH POS</a>
                         </li>
@@ -298,7 +301,8 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
 </body>
 <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
     <div class="container text-center">
-      <small>Copyright &copy; <a href="https://www.encodeunlimited.com/">www.encodeunlimited.com</a></small>
+        <small>Copyright &copy; <a href="https://www.encodeunlimited.com/">www.encodeunlimited.com</a></small>
     </div>
-  </footer>
+</footer>
+
 </html>

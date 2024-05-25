@@ -154,7 +154,7 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
     
     <div class="w-100 d-flex justify-content-end mt-2">
         <?php if(isset($_GET['view_only']) && $_GET['view_only'] == true && $_SESSION['type'] == 1): ?>
-        <button class="btn btn-sm btn-danger me-2 rounded-0" type="button" id="delete_data"><i class="fa fa-trash"></i> Delete</button>
+        <button class="btn btn-sm btn-danger me-2 rounded-0" type="button" id="delete_data"><i class="fa fa-undo"></i> Refund</button>
         <?php endif; ?>
         <button class="btn btn-sm btn-success me-2 rounded-0" type="button" id="print_receipt"><i class="fa fa-print"></i> Print</button>
         <button class="btn btn-sm btn-dark rounded-0" type="button" data-bs-dismiss="modal">Close</button>
@@ -194,7 +194,7 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
         })
         $('#uni_modal').modal('hide')
         $('#delete_data').click(function(){
-            _conf("Are you sure to delete <b>"+<?php echo $receipt_no ?>+"</b>?",'delete_data',['<?php echo $transaction_id ?>'])
+            _conf("Are you sure to Refund <b>"+<?php echo $receipt_no ?>+"</b>?",'delete_data',['<?php echo $transaction_id ?>'])
         })
     })
 

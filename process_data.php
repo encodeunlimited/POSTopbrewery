@@ -26,26 +26,24 @@ if ($pay_method == "all") {
 
 // Now you can use $date_from, $date_to, and $payment_method as needed
 // For example:
-// echo "<strong>Top Brewery</strong>";
-// echo "<br>";
-// echo "<small>Tel: +60196000671 | 0342856778</small>";
-// echo "<br>";
-// echo "<small>E-mail: topbrewery@gmail.com</small>";
-// echo "<br>";
-// echo "<small>No24. JLN BUNGA TANJUNG 8A</small>";
-// echo "<br>";
-// echo "<small>TMN MUDA 56100 SELANGOR</small>";
-// echo "<br>";
-echo "<strong>OUTLET - 04</strong>";
+echo "<H2>Top Brewery</H2>";
+echo "<small>Tel: +60196000671 | 0342856778</small>";
 echo "<br>";
+echo "<small>E-mail: topbrewery@gmail.com</small>";
 echo "<br>";
+echo "<small>No24. JLN BUNGA TANJUNG 8A</small>";
+echo "<br>";
+echo "<small>TMN MUDA 56100 SELANGOR</small>";
 echo "<br>";
 
+// echo "<H2>OUTLET - 04</H2>";
+// echo "<br>";
+echo "<hr>";
 echo "Date From: " . $dfrom . "<br>";
 echo "Date To: " . $dto . "<br>";
 // echo "Payment Method: " . $pay_method . "<br>";
 
-echo "</br>";
+echo "<hr>";
 // Execute queries
 // if ($_SESSION['type'] == 1) {
 //     $total = $conn->query("SELECT sum(total) as `total` FROM `transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}' {$pay_query1}")->fetchArray()['total'];
@@ -56,7 +54,7 @@ echo "</br>";
 $total = $conn->query("SELECT sum(total) as `total` FROM `transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}' AND customer = 'cash'")->fetchArray()['total'];
 echo "Cash Total: ";
 echo number_format($total, 2);
-echo "</br>";
+echo "</hr>";
 
 
 $total = $conn->query("SELECT sum(total) as `total` FROM `transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}' AND customer = 'qr'")->fetchArray()['total'];
@@ -92,7 +90,7 @@ echo "Total Profit: ";
 echo number_format($t_profit, 2);
 
 echo "</br>";
-echo "</br>";
+echo "<hr>";
 
 
 // $sql = "SELECT t.*, u.fullname FROM transaction_list t INNER JOIN user_list u ON t.user_id = u.user_id WHERE strftime('%Y-%m-%d %H:%M:%S', t.date_added) BETWEEN '{$dfrom}' AND '{$dto}' ORDER BY strftime('%s', t.date_added) DESC;";
@@ -173,7 +171,7 @@ while ($row = $qry->fetchArray()) {
 
 // Now $product_counts and $category_counts hold the required data with names
 // For example, to print them:
-echo "Product-wise counts:";
+echo "<strong>Product-wise counts:</strong>";
 echo "</br>";
 foreach ($product_counts as $product_id => $product_info) {
     echo "Product: {$product_info['name']} (ID: $product_id) - Count: {$product_info['count']}";
@@ -182,14 +180,20 @@ foreach ($product_counts as $product_id => $product_info) {
 
 echo "</br>";
 
-echo "Category-wise counts:";
+echo "<strong>Category-wise counts:</strong>";
 echo "</br>";
 foreach ($category_counts as $category_id => $category_info) {
     echo "Category: {$category_info['name']} (ID: $category_id) - Count: {$category_info['count']}";
     echo "</br>";
 }
-
-echo "</br>";
+echo "<hr>";
 echo "Total Item Sales: ".$tot_item;
+echo "<hr>";
+echo "<strong>Refund Summery:</strong>";
+echo "</br>";
+$total = $conn->query("SELECT sum(total) as `total` FROM `refund_transaction_list` WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) BETWEEN '{$dfrom}' AND '{$dto}'")->fetchArray()['total'];
+echo "Gross Refund: ";
+echo number_format($total, 2);
+echo "</br>";
 
 

@@ -2,7 +2,7 @@
 session_start();
 require_once("DBConnection.php");
 if(isset($_GET['id'])){
-$qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$_GET['id']}'");
+$qry = $conn->query("SELECT * FROM `refund_transaction_list` where transaction_id = '{$_GET['id']}'");
     foreach($qry->fetchArray() as $k => $v){
         $$k = $v;
     }
@@ -32,11 +32,11 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
 </style>
 <div class="container-fluid">
     <div id="outprint_receipt">
-    <div class="text-center fs-6 fs-bold">
-            <!-- <span><img src="image\logoabc.png" width='250' height='100'></span><br> -->
-            <span><h3 class="fw-bold">OUTLET - 04</h1></span>
-            <!-- <small style="line-height:normal;" class="fw-bold">Tel: +60196000671 | 0342856778</small><br>
-            <small style="line-height:normal;" class="fw-bold ">E-mail : topbrewery@gmail.com</small><br> -->
+        <div class="text-center fs-6 fs-bold">
+            <span><img src="image\logoabc.png" width='250' height='100'></span><br>
+            <span><h3 class="fw-bold">Top Brewery - Refund</h1></span>
+            <small style="line-height:normal;" class="fw-bold">Tel: +60196000671 | 0342856778</small><br>
+            <small style="line-height:normal;" class="fw-bold ">E-mail : topbrewery@gmail.com</small><br>
         </div>
         <table class="table table-striped">
             <colgroup>
@@ -45,10 +45,10 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
             </colgroup>  
             <thead>
             <tr class="text-dark">
-                <!-- <th colspan="2" class="py-0 px-1" style="font-size: small; text-align: center;">
+                <th colspan="2" class="py-0 px-1" style="font-size: small; text-align: center;">
                     <small class="fw-bold">No24. JLN BUNGA TANJUNG 8A</small><br>
                     <small class="fw-bold">TMN MUDA 56100 SELANGOR</small>
-                </th> -->
+                </th>
                 <!-- <th class="py-0 px-1" style="font-size: small; text-align: center;"><small class="fw-bold">Bopitiya Branch<br>
                     <small class="fw-bold">No 115/5/A,Bopitiya,Pamunugama</small>
                 </th> -->
@@ -84,7 +84,7 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
             </thead>
             <tbody>
                 <?php 
-                $items = $conn->query("SELECT i.*, p.name as pname,p.product_code FROM `transaction_items` i inner join product_list p on i.product_id = p.product_id where `transaction_id` = '{$transaction_id}'");
+                $items = $conn->query("SELECT i.*, p.name as pname,p.product_code FROM `refund_transaction_items` i inner join product_list p on i.product_id = p.product_id where `transaction_id` = '{$transaction_id}'");
                 while($row=$items->fetchArray()):
                 ?>
                 <tr>
@@ -154,7 +154,7 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
     
     <div class="w-100 d-flex justify-content-end mt-2">
         <?php if(isset($_GET['view_only']) && $_GET['view_only'] == true && $_SESSION['type'] == 1): ?>
-        <button class="btn btn-sm btn-danger me-2 rounded-0" type="button" id="delete_data"><i class="fa fa-undo"></i> Refund</button>
+        <!-- <button class="btn btn-sm btn-danger me-2 rounded-0" type="button" id="delete_data"><i class="fa fa-undo"></i> Refund</button> -->
         <?php endif; ?>
         <button class="btn btn-sm btn-success me-2 rounded-0" type="button" id="print_receipt"><i class="fa fa-print"></i> Print</button>
         <button class="btn btn-sm btn-dark rounded-0" type="button" data-bs-dismiss="modal">Close</button>
@@ -194,9 +194,11 @@ $qry = $conn->query("SELECT * FROM `transaction_list` where transaction_id = '{$
         })
         $('#uni_modal').modal('hide')
         $('#delete_data').click(function(){
-            _conf("Are you sure to delete <b>"+<?php echo $receipt_no ?>+"</b>?",'delete_data',['<?php echo $transaction_id ?>'])
+            _conf("Are you sure to Refund <b>"+<?php echo $receipt_no ?>+"</b>?",'delete_data',['<?php echo $transaction_id ?>'])
         })
     })
+
+    
     function delete_data($id){
         $('#confirm_modal button').attr('disabled',true)
         $.ajax({
