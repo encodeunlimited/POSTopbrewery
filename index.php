@@ -2,6 +2,7 @@
 //Encodeunlimited
 session_start();
 if (!isset($_SESSION['user_id'])) {
+    date_default_timezone_set('Asia/Colombo');
     header("Location:./login.php");
     exit;
 }
@@ -21,6 +22,7 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="image/favicon.ico">
     <title><?php echo ucwords(str_replace('_', '', $page)) ?> | TB POS</title>
+    <!-- <title><?php echo ucwords(str_replace('_', '', $page)) ?> | DF TB POS</title> -->
     <link rel="stylesheet" href="./Font-Awesome-master/css/all.min.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <script src="./js/jquery-3.6.0.min.js"></script>
@@ -148,15 +150,23 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
         .body-bg {
             background-color: bisque;
         }
+
+        #clock {
+        margin-left: 15px; /* Adjust as necessary */
+        font-size: 16px; /* Adjust the font size */
+        color: #f1f1f1; /* Change the color to match your design */
+    }
     </style>
 </head>
 
-<body class="body-bg">
+<!-- <body class="body-bg"> -->
+<body>
     <main>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient" id="topNavBar">
             <div class="container">
                 <a class="navbar-brand" href="./">
-                    DF TB POS
+                    <!-- DF TB POS -->
+                    TB POS
                 </a>
                 <!-- <a class="navbar-brand" href="./">
                     TB POS
@@ -182,13 +192,15 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
                             <li class="nav-item">
                                 <a class="nav-link" href="./?page=maintenance">Maintenance</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link  <?php echo ($page == 'refund_report') ? 'active' : '' ?>" href="./?page=refund_report">Refund</a>
-                            </li>
+                            
+                            
                             <!-- <li class="nav-item">
                         <a class="nav-link" href="./?page=client">Credit Client</a>
                     </li> -->
                         <?php endif; ?>
+                        <li class="nav-item">
+                                <a class="nav-link  <?php echo ($page == 'refund_report') ? 'active' : '' ?>" href="./?page=refund_report">Refund</a>
+                            </li>
                         <li class="nav-item">
                             <a class="nav-link  <?php echo ($page == 'sales_report') ? 'active' : '' ?>" href="./?page=sales_report">Sales</a>
                         </li>
@@ -221,6 +233,8 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
                         <a class="nav-link  <?php echo ($page == 'cr_sales') ? 'active' : '' ?>" href="./?page=cr_sales">CR POS</a>
                         </li> -->
                         <?php endif; ?>
+                        
+                        <li><span id="clock" class="nav-link"></span></li>
 
                     </ul>
                 </div>
@@ -304,5 +318,23 @@ if ($_SESSION['type'] != 1 && in_array($page, array('maintenance', 'products', '
         <small>Copyright &copy; <a href="https://www.encodeunlimited.com/">www.encodeunlimited.com</a></small>
     </div>
 </footer>
+<script>
+    function updateClock() {
+        const clockElement = document.getElementById('clock');
+        const now = new Date();
+        const formattedTime = now.toLocaleString('en-GB', {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour12: false
+        });
+        clockElement.textContent = formattedTime;
+    }
 
+    setInterval(updateClock, 1000); // Update the clock every second
+    updateClock(); // Initial call to display the clock immediately
+</script>
 </html>

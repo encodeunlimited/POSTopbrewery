@@ -55,7 +55,7 @@ $qry = $conn->query("SELECT * FROM `refund_transaction_list` where transaction_i
             </tr>
             <tr>
                 <td style="font-size: small; text-align: left;">
-                    Date : <?php echo date("Y-m-d",strtotime($date_added)) ?><br>
+                    Date : <?php echo date("Y-m-d H:i:s",strtotime($date_added)) ?><br>
                     Receipt No : <?php echo $receipt_no ?>
                 </td>
                 <td style="font-size: small; text-align: left;">
@@ -104,36 +104,43 @@ $qry = $conn->query("SELECT * FROM `refund_transaction_list` where transaction_i
                 <?php endwhile; ?>
             </tbody>
             <tfoot>
-                <tr>
-                    <th class="px-1 py-0 " colspan="3">Total</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($t_discount+$total,2) ?></th>
-                </tr>
-                <?php if ($t_discount != 0): ?>
-                <tr>
-                    <th class="px-1 py-0" colspan="3">Your Discount(-)</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($t_discount,2) ?></th>
+            <?php if (($t_discount != 0) || ($s_desc != 0)) : ?>
+                    <tr>
+                    <th class="px-1 py-0 " colspan="3">Net Total</th>
+                    <th class="px-1 py-0 text-end"><?php echo number_format($t_discount + $total, 2) ?></th>
                 </tr>
                 <?php endif; ?>
-                <?php if ($s_desc != 0): ?>
-                <tr>
-                    <th class="px-1 py-0" colspan="3">Special Discount(-)</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($s_desc,2) ?></th>
-                </tr>
-                <tr>
-                    <th class="px-1 py-0" colspan="3">Total</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($total-$s_desc,2) ?></th>
-                </tr>
+                
+                <?php if ($t_discount != 0) : ?>
+                    <tr>
+                        <th class="px-1 py-0" colspan="3">Your Discount(-)</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($t_discount, 2) ?></th>
+                    </tr>
                 <?php endif; ?>
-                <?php if ($arrears != 0): ?>
-                <tr>
-                    <th class="px-1 py-0" colspan="3">Your Arrears(-)</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($arrears,2) ?></th>
-                </tr>
-                <tr>
-                    <th class="px-1 py-0" colspan="3">Gross Total</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($total-$arrears,2) ?></th>
-                </tr>
+                <?php if ($s_desc != 0) : ?>
+                    <tr>
+                        <th class="px-1 py-0" colspan="3">Special Discount(-)</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($s_desc, 2) ?></th>
+                    </tr>
+                    <tr>
+                        <th class="px-1 py-0" colspan="3">Total</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($total - $s_desc, 2) ?></th>
+                    </tr>
                 <?php endif; ?>
+                <?php if ($arrears != 0) : ?>
+                    <tr>
+                        <th class="px-1 py-0" colspan="3">Your Arrears(-)</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($arrears, 2) ?></th>
+                    </tr>
+                    <tr>
+                        <th class="px-1 py-0" colspan="3">Gross Total</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($total - $arrears, 2) ?></th>
+                    </tr>
+                <?php endif; ?>
+                <tr>
+                    <th class="px-1 py-0 " colspan="3">Gross Total</th>
+                    <th class="px-1 py-0 text-end"><?php echo number_format($total, 2) ?></th>
+                </tr>
                 <!-- <tr>
                     <th class="px-1 py-0" colspan="3">Tendered</th>
                     <th class="px-1 py-0 text-end"><?php echo number_format($tendered_amount,2) ?></th>

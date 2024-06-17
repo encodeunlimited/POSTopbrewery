@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once('DBConnection.php');
+date_default_timezone_set('Asia/Colombo');
+
 
 class Actions extends DBConnection
 {
@@ -383,15 +385,91 @@ class Actions extends DBConnection
         }
         return json_encode($resp);
     }
+    // function save_transaction()
+    // {
+    //     date_default_timezone_set('Asia/Colombo');
+
+    //     extract($_POST);
+    //     $data = "";
+    //     $receipt_no = time();
+    //     $i = 0;
+    //     while (true) {
+    //         $i++;
+    //         $chk = $this->query("SELECT count(transaction_id) `count` FROM `transaction_list` where receipt_no = '{$receipt_no}' ")->fetchArray()['count'];
+    //         if ($chk > 0) {
+    //             $receipt_no = time() . $i;
+    //         } else {
+    //             break;
+    //         }
+    //     }
+    //     $_POST['receipt_no'] = $receipt_no;
+    //     $_POST['user_id'] = $_SESSION['user_id'];
+    //     foreach ($_POST as $k => $v) {
+    //         if (!in_array($k, array('id')) && !is_array($_POST[$k])) {
+    //             $v = addslashes(trim($v));
+    //             if (empty($id)) {
+    //                 $cols[] = "`{$k}`";
+    //                 $vals[] = "'{$v}'";
+    //             } else {
+    //                 if (!empty($data)) $data .= ", ";
+    //                 $data .= " `{$k}` = '{$v}' ";
+    //             }
+    //         }
+    //     }
+    //     if (isset($cols) && isset($vals)) {
+    //         $cols_join = implode(",", $cols);
+    //         $vals_join = implode(",", $vals);
+    //     }
+    //     if (empty($id)) {
+    //         $sql = "INSERT INTO `transaction_list` ({$cols_join}) VALUES ($vals_join)";
+    //     } else {
+    //         $sql = "UPDATE `transaction_list` set {$data} where stock_id = '{$id}'";
+    //     }
+
+    //     @$save = $this->query($sql);
+    //     if ($save) {
+    //         $resp['status'] = "success";
+    //         $_SESSION['flashdata']['type'] = "success";
+    //         if (empty($id))
+    //             $_SESSION['flashdata']['msg'] = "Transaction successfully saved.";
+    //         else
+    //             $_SESSION['flashdata']['msg'] = "Transaction successfully updated.";
+    //         if (empty($id))
+    //             $last_id = $this->query("SELECT last_insert_rowid()")->fetchArray()[0];
+    //         $tid = empty($id) ? $last_id : $id;
+    //         $data = "";
+    //         foreach ($product_id as $k => $v) {
+    //             if (!empty($data)) $data .= ",";
+    //             $data .= "('{$tid}','{$v}','{$quantity[$k]}','{$discount[$k]}','{$price[$k]}','{$profit[$k]}')";
+    //         }
+    //         if (!empty($data))
+    //             $this->query("DELETE FROM transaction_items where transaction_id = '{$tid}'");
+    //         $sql = "INSERT INTO transaction_items (`transaction_id`,`product_id`,`quantity`,`discount`,`price`,`profit`) VALUES {$data}";
+    //         $save = $this->query($sql);
+    //         $resp['transaction_id'] = $tid;
+    //     } else {
+    //         $resp['status'] = "failed";
+    //         if (empty($id))
+    //             $resp['msg'] = "Saving New Transaction Failed.";
+    //         else
+    //             $resp['msg'] = "Updating Transaction Failed.";
+    //         $resp['error'] = $this->lastErrorMsg();
+    //     }
+    //     return json_encode($resp);
+    // }
+
     function save_transaction()
     {
+        date_default_timezone_set('Asia/Colombo');
+
         extract($_POST);
         $data = "";
         $receipt_no = time();
+        $date_now = date("Y-m-d H:i:s");
         $i = 0;
         while (true) {
             $i++;
-            $chk = $this->query("SELECT count(transaction_id) `count` FROM `transaction_list` where receipt_no = '{$receipt_no}' ")->fetchArray()['count'];
+            $chk = $this->query("SELECT count(transaction_id) `count` FROM `transaction_list` WHERE receipt_no = '{$receipt_no}' ")->fetchArray()['count'];
             if ($chk > 0) {
                 $receipt_no = time() . $i;
             } else {
@@ -400,6 +478,7 @@ class Actions extends DBConnection
         }
         $_POST['receipt_no'] = $receipt_no;
         $_POST['user_id'] = $_SESSION['user_id'];
+        $_POST['date_added'] = $date_now; // Add date_added to transaction_list
         foreach ($_POST as $k => $v) {
             if (!in_array($k, array('id')) && !is_array($_POST[$k])) {
                 $v = addslashes(trim($v));
@@ -417,9 +496,9 @@ class Actions extends DBConnection
             $vals_join = implode(",", $vals);
         }
         if (empty($id)) {
-            $sql = "INSERT INTO `transaction_list` ({$cols_join}) VALUES ($vals_join)";
+            $sql = "INSERT INTO `transaction_list` ({$cols_join}) VALUES ({$vals_join})";
         } else {
-            $sql = "UPDATE `transaction_list` set {$data} where stock_id = '{$id}'";
+            $sql = "UPDATE `transaction_list` SET {$data} WHERE stock_id = '{$id}'";
         }
 
         @$save = $this->query($sql);
@@ -436,11 +515,11 @@ class Actions extends DBConnection
             $data = "";
             foreach ($product_id as $k => $v) {
                 if (!empty($data)) $data .= ",";
-                $data .= "('{$tid}','{$v}','{$quantity[$k]}','{$discount[$k]}','{$price[$k]}','{$profit[$k]}')";
+                $data .= "('{$tid}','{$v}','{$quantity[$k]}','{$discount[$k]}','{$price[$k]}','{$profit[$k]}','{$date_now}')";
             }
             if (!empty($data))
-                $this->query("DELETE FROM transaction_items where transaction_id = '{$tid}'");
-            $sql = "INSERT INTO transaction_items (`transaction_id`,`product_id`,`quantity`,`discount`,`price`,`profit`) VALUES {$data}";
+                $this->query("DELETE FROM transaction_items WHERE transaction_id = '{$tid}'");
+            $sql = "INSERT INTO transaction_items (`transaction_id`,`product_id`,`quantity`,`discount`,`price`,`profit`,`date_added`) VALUES {$data}";
             $save = $this->query($sql);
             $resp['transaction_id'] = $tid;
         } else {
@@ -453,6 +532,7 @@ class Actions extends DBConnection
         }
         return json_encode($resp);
     }
+
     function delete_transaction()
     {
         extract($_POST);
@@ -674,7 +754,7 @@ class Actions extends DBConnection
 
             $this->query("UPDATE `ctransaction_list` set arrears= arrears - $amount where transaction_id = '{$transaction_id}'");
             //$this->query("UPDATE `ctransaction_list` set arrears= 0 where transaction_id = '{$transaction_id}'");
-            
+
             if ($save) {
                 $resp['status'] = "success";
                 if (empty($id))
@@ -712,7 +792,7 @@ class Actions extends DBConnection
     {
         extract($_POST);
 
-        
+
         if ($done_a) {
             $resp['status'] = 'success';
             $_SESSION['flashdata']['type'] = 'success';
@@ -805,9 +885,9 @@ switch ($a) {
     case 'delete_pay':
         echo $action->delete_pay();
         break;
-        case 'delete_pay':
-            echo $action->done_pay();
-            break;
+    case 'delete_pay':
+        echo $action->done_pay();
+        break;
     default:
         // default action here
         break;

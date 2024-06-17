@@ -184,8 +184,6 @@
                                    WHERE transaction_id = '{$row['transaction_id']}'")->fetchArray()['total'];
         $gross_total += $transaction_total;
 
-        
-
         if (!isset($payment_type_counts[$payment_type])) {
             $payment_type_counts[$payment_type] = [
                 'item_count' => 0,
@@ -209,8 +207,6 @@
 
         // Aggregate gross profit
         $gross_profit_sum += $row['t_profit'];
-
-        $net_total=$gross_total-$t_discount_sum;
 
         // Get product-wise count for the transaction with product names
         $product_query = $conn->query("SELECT pl.product_id, pl.name as product_name, SUM(ti.quantity) as `count` 
@@ -281,6 +277,8 @@
         $refund_total += $refund_items['total'];
     }
 
+    $net_total=$gross_total-$t_discount_sum;
+
     ?>
 
     <style>
@@ -309,12 +307,12 @@
     <div class="container-fluid">
         <div id="outprint_receipt">
             <div class="text-center fs-6 fs-bold">
-                <span><img src="image\logoabc.png" width='250' height='100'></span><br>
+                <span><img src="image\logoabc.png" width='250' height='250'></span><br>
                 <!-- <span>
                     <h3 class="fw-bold">OUTLET - 04</h1>
                 </span> -->
                 <span>
-                    <h3 class="fw-bold">Top Brewery</h1>
+                    <h4 class="fw-bold">68000</h1>
                 </span>
                 <small style="line-height:normal;" class="fw-bold">Tel: +60196000671 | 0342856778</small><br>
                 <small style="line-height:normal;" class="fw-bold ">E-mail : topbrewery@gmail.com</small><br>
@@ -322,10 +320,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr class="text-dark">
-                        <th class="py-0 px-1" style="font-size: small; text-align: center;">
+                        <!-- <th class="py-0 px-1" style="font-size: small; text-align: center;">
                             <small class="fw-bold">No24. JLN BUNGA TANJUNG 8A</small><br>
                             <small class="fw-bold">TMN MUDA 56100 SELANGOR</small>
-                        </th>
+                        </th> -->
                     </tr>
                     <tr>
                         <td style="font-size: small;  text-align: center;">
@@ -334,7 +332,7 @@
                     </tr>
                 </thead>
             </table>
-            <?php echo "<strong>PRICE WISE SUMMERY</strong><br>"; ?>
+            <!-- <?php echo "<strong>PRICE WISE SUMMERY</strong><br>"; ?>
             <table class="table table-striped">
                 <colgroup>
                     <col width="70%">
@@ -371,17 +369,12 @@
                         <th class="px-1 py-0 "><?php echo number_format($gross_total, 2) ?></th>
                     </tr>
                     <tr>
-                        <th class="px-1 py-0">Net Total</th>
-                        <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
-                        <th class="px-1 py-0 "><?php echo number_format($net_total, 2) ?></th>
-                    </tr>
-                    <tr>
                         <th class="px-1 py-0">Gross Profit</th>
                         <th class="px-1 py-0 "></th>
                         <th class="px-1 py-0 "><?php echo number_format($gross_profit_sum, 2) ?></th>
                     </tr>
                 </tfoot>
-            </table>
+            </table> -->
             <?php echo "<strong>CATEGORY WISE SUMMERY</strong><br>"; ?>
             <table class="table table-striped">
                 <colgroup>
@@ -416,6 +409,11 @@
                         <th class="px-1 py-0">Gross Total</th>
                         <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
                         <th class="px-1 py-0 "><?php echo number_format($gross_total, 2) ?></th>
+                    </tr>
+                    <tr>
+                        <th class="px-1 py-0">Net Total</th>
+                        <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
+                        <th class="px-1 py-0 "><?php echo number_format($net_total, 2) ?></th>
                     </tr>
                 </tfoot>
             </table>
