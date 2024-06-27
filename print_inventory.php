@@ -160,18 +160,16 @@
 
 <body class="body-bg">
 
-<div class="container-fluid">
+    <div class="container-fluid">
         <div id="outprint_receipt">
             <div class="text-center fs-6 fs-bold">
-                <span><img src="image\logoabc.png" width='250' height='250'></span><br>
-                <!-- <span>
-                    <h3 class="fw-bold">OUTLET - 04</h1>
-                </span> -->
+                <span><img src="image\logoabc.png" width='100' height='100'></span><br>
                 <span>
-                    <h4 class="fw-bold">68000</h1>
+                    <h6 class="fw-bold">201303306948 (002282392-A)</h6>
                 </span>
-                <small style="line-height:normal;" class="fw-bold">Tel: +60196000671 | 0342856778</small><br>
-                <small style="line-height:normal;" class="fw-bold ">E-mail : topbrewery@gmail.com</small><br>
+                <small>Tel: 03-42856778 | 019-6000671</small><br>
+                <small>E-mail : topbrewery@gmail.com</small><br>
+                <small>No. 24, jalan bunga tanjung 8a, taman muda, 68000 ampang, selangor.</small><br>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -183,28 +181,28 @@
                     </tr>
                     <tr>
                         <td style="font-size: small;  text-align: center;">
-                        Date & Time : <?php echo date("Y-m-d H:i:s") ?><br>
+                            Date & Time : <?php echo date("d-m-Y H:i:s") ?><br>
                         </td>
                     </tr>
                 </thead>
             </table>
 
-<?php
-// Include your database connection file if needed
+            <?php
+            // Include your database connection file if needed
 
-// Start the session if not started already
-// session_start();
-require_once("DBConnection.php");
+            // Start the session if not started already
+            // session_start();
+            require_once("DBConnection.php");
 
-// Retrieve data from the database and generate the table HTML
-$tableHTML = '<table class="table table-striped table-hover">';
-$tableHTML .= '<colgroup>
+            // Retrieve data from the database and generate the table HTML
+            $tableHTML = '<table class="table table-striped table-hover">';
+            $tableHTML .= '<colgroup>
                     <col width="20%">
                     <col width="20%">
                     <col width="40%">
                     <col width="20%">
                 </colgroup>';
-$tableHTML .= '<thead>
+            $tableHTML .= '<thead>
                     <tr>
                         <th class="py-0 px-1">Category</th>
                         <th class="py-0 px-1">Product Code</th>
@@ -212,66 +210,65 @@ $tableHTML .= '<thead>
                         <th class="py-0 px-1">Available Quantity</th>
                     </tr>
                 </thead>';
-$tableHTML .= '<tbody>';
+            $tableHTML .= '<tbody>';
 
-function getMainItemDetails($product_id)
-{
-    if (strpos($product_id, '*') !== false) {
-        list($main_id, $multiplier) = explode('*', $product_id);
-    } else {
-        $main_id = $product_id;
-        $multiplier = 1; // Default multiplier if no asterisk is found
-    }
-    return [
-        'main_id' => $main_id,
-        'multiplier' => intval($multiplier)
-    ];
-}
-
-$sql = "SELECT p.*, c.name AS cname FROM `product_list` p INNER JOIN `category_list` c ON p.category_id = c.category_id WHERE p.status = 1 AND p.category_id NOT IN (209) ORDER BY p.category_id ASC";
-$qry = $conn->query($sql);
-while ($row = $qry->fetchArray()) {
-    $stock_in = $conn->query("SELECT SUM(quantity) AS `total` FROM `stock_list` WHERE strftime('%s', `expiry_date` || '23:59:59') >= strftime('%s', CURRENT_TIMESTAMP) AND product_id = '{$row['product_id']}'")->fetchArray()['total'];
-    // $stock_out = $conn->query("SELECT SUM(quantity) AS `total` FROM `transaction_items` WHERE product_id = '{$row['product_id']}'")->fetchArray()['total'];
-
-    $stock_out = 0;
-
-    // Calculate stock out
-    $sql1 = "SELECT c.*, p.product_code as pcode FROM `product_list` p INNER JOIN `transaction_items` c ON p.product_id = c.product_id WHERE p.status = 1 ORDER BY `name` ASC";
-    $qry1 = $conn->query($sql1);
-
-    while ($row1 = $qry1->fetchArray()) {
-        $details = getMainItemDetails($row1['pcode']);
-
-        if ($details['main_id'] == $row['product_code']) {
-            if ($details['multiplier'] > 1) {
-                $stock_out += $details['multiplier'] * $row1['quantity'];
-            } else {
-                $stock_out += $row1['quantity'];
+            function getMainItemDetails($product_id)
+            {
+                if (strpos($product_id, '*') !== false) {
+                    list($main_id, $multiplier) = explode('*', $product_id);
+                } else {
+                    $main_id = $product_id;
+                    $multiplier = 1; // Default multiplier if no asterisk is found
+                }
+                return [
+                    'main_id' => $main_id,
+                    'multiplier' => intval($multiplier)
+                ];
             }
-        }
-    }
 
-    $stock_in = $stock_in > 0 ? $stock_in : 0;
-    $stock_out = $stock_out > 0 ? $stock_out : 0;
-    $qty = $stock_in - $stock_out;
-    $qty = $qty > 0 ? $qty : 0;
+            $sql = "SELECT p.*, c.name AS cname FROM `product_list` p INNER JOIN `category_list` c ON p.category_id = c.category_id WHERE p.status = 1 AND p.category_id NOT IN (209) ORDER BY p.category_id ASC";
+            $qry = $conn->query($sql);
+            while ($row = $qry->fetchArray()) {
+                $stock_in = $conn->query("SELECT SUM(quantity) AS `total` FROM `stock_list` WHERE strftime('%s', `expiry_date` || '23:59:59') >= strftime('%s', CURRENT_TIMESTAMP) AND product_id = '{$row['product_id']}'")->fetchArray()['total'];
+                // $stock_out = $conn->query("SELECT SUM(quantity) AS `total` FROM `transaction_items` WHERE product_id = '{$row['product_id']}'")->fetchArray()['total'];
 
-    $details = getMainItemDetails($row['product_code']);
+                $stock_out = 0;
 
-    if ($details['multiplier'] > 1) {
-    } else {
-        $tableHTML .= '<td class="td py-0 px-1">' . $row['cname'] . '</td>';
-        $tableHTML .= '<td class="td py-0 px-1">' . $row['product_code'] . '</td>';
-        $tableHTML .= '<td class="td py-0 px-1">' . $row['name'] . '</td>';
-        $tableHTML .= '<td class="td py-0 px-1">' . $qty . '</td>';
-        $tableHTML .= '</tr>';
-    }
-}
-$tableHTML .= '</tbody>';
-$tableHTML .= '</table>';
+                // Calculate stock out
+                $sql1 = "SELECT c.*, p.product_code as pcode FROM `product_list` p INNER JOIN `transaction_items` c ON p.product_id = c.product_id WHERE p.status = 1 ORDER BY `name` ASC";
+                $qry1 = $conn->query($sql1);
 
-echo $tableHTML;
+                while ($row1 = $qry1->fetchArray()) {
+                    $details = getMainItemDetails($row1['pcode']);
 
-?>
+                    if ($details['main_id'] == $row['product_code']) {
+                        if ($details['multiplier'] > 1) {
+                            $stock_out += $details['multiplier'] * $row1['quantity'];
+                        } else {
+                            $stock_out += $row1['quantity'];
+                        }
+                    }
+                }
 
+                $stock_in = $stock_in > 0 ? $stock_in : 0;
+                $stock_out = $stock_out > 0 ? $stock_out : 0;
+                $qty = $stock_in - $stock_out;
+                $qty = $qty > 0 ? $qty : 0;
+
+                $details = getMainItemDetails($row['product_code']);
+
+                if ($details['multiplier'] > 1) {
+                } else {
+                    $tableHTML .= '<td class="td py-0 px-1">' . $row['cname'] . '</td>';
+                    $tableHTML .= '<td class="td py-0 px-1">' . $row['product_code'] . '</td>';
+                    $tableHTML .= '<td class="td py-0 px-1">' . $row['name'] . '</td>';
+                    $tableHTML .= '<td class="td py-0 px-1">' . $qty . '</td>';
+                    $tableHTML .= '</tr>';
+                }
+            }
+            $tableHTML .= '</tbody>';
+            $tableHTML .= '</table>';
+
+            echo $tableHTML;
+
+            ?>

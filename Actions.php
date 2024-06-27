@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once('DBConnection.php');
-date_default_timezone_set('Asia/Colombo');
-
+// date_default_timezone_set('Asia/Colombo');
+date_default_timezone_set('Asia/Kuala_Lumpur');
 
 class Actions extends DBConnection
 {
@@ -460,7 +460,7 @@ class Actions extends DBConnection
 
     function save_transaction()
     {
-        date_default_timezone_set('Asia/Colombo');
+        date_default_timezone_set('Asia/Kuala_Lumpur');
 
         extract($_POST);
         $data = "";

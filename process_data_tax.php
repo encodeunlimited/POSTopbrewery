@@ -277,7 +277,7 @@
         $refund_total += $refund_items['total'];
     }
 
-    $net_total=$gross_total-$t_discount_sum;
+    $net_total = $gross_total - $t_discount_sum;
 
     ?>
 
@@ -304,30 +304,35 @@
             text-align: left;
         }
     </style>
+    <?php
+    $dateFromObj = new DateTime($dfrom);
+    $dfromFormatted = $dateFromObj->format('d-m-Y H:i:s');
+
+    // Convert $dto to "d-m-Y H:i:s"
+    $dateToObj = new DateTime($dto);
+    $dtoFormatted = $dateToObj->format('d-m-Y H:i:s');
+    ?>
     <div class="container-fluid">
         <div id="outprint_receipt">
             <div class="text-center fs-6 fs-bold">
-                <span><img src="image\logoabc.png" width='250' height='250'></span><br>
-                <!-- <span>
-                    <h3 class="fw-bold">OUTLET - 04</h1>
-                </span> -->
+                <span><img src="image\logoabc.png" width='100' height='100'></span><br>
                 <span>
-                    <h4 class="fw-bold">68000</h1>
+                    <h6 class="fw-bold">201303306948 (002282392-A)</h6>
                 </span>
-                <small style="line-height:normal;" class="fw-bold">Tel: +60196000671 | 0342856778</small><br>
-                <small style="line-height:normal;" class="fw-bold ">E-mail : topbrewery@gmail.com</small><br>
+                <small>Tel: 03-42856778 | 019-6000671</small><br>
+                <small>E-mail : topbrewery@gmail.com</small><br>
+                <small>No. 24, jalan bunga tanjung 8a, taman muda, 68000 ampang, selangor.</small><br>
             </div>
             <table class="table table-striped">
                 <thead>
                     <tr class="text-dark">
-                        <!-- <th class="py-0 px-1" style="font-size: small; text-align: center;">
-                            <small class="fw-bold">No24. JLN BUNGA TANJUNG 8A</small><br>
-                            <small class="fw-bold">TMN MUDA 56100 SELANGOR</small>
-                        </th> -->
+                        <th class="py-0 px-1" style="font-size: small; text-align: center;">
+
+                        </th>
                     </tr>
                     <tr>
                         <td style="font-size: small;  text-align: center;">
-                            Period : <?php echo $dfrom . " | " . $dto ?><br>
+                            Period : <?php echo $dfromFormatted . " | " . $dtoFormatted ?><br>
                         </td>
                     </tr>
                 </thead>

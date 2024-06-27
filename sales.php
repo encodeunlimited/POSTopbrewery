@@ -1,4 +1,4 @@
-<?php date_default_timezone_set('Asia/Colombo'); ?>
+<?php date_default_timezone_set('Asia/Kuala_Lumpur'); ?>
 <div class="w-100 h-100 d-flex flex-column">
     <div class="row">
         <div class="col-8">
@@ -118,23 +118,20 @@
                                             $qty = $stock_in - $stock_out;
                                             $details = getMainItemDetails($row['product_code']);
 
-                                            if($details['multiplier']>1){
-                                                
+                                            if ($details['multiplier'] > 1) {
+
                                                 $qty = 1;
-
-                                            }
-                                            else{
+                                            } else {
                                                 $qty = $qty > 0 ? $qty : 0;
-
                                             }
 
-                                            
+
 
                                         ?>
                                             <tr class="item <?php echo $qty < 50 ? "bg-danger bg-opacity-25" : '' ?>" data-id="<?php echo $row['product_id'] ?>">
                                                 <td class="td py-0 px-1 pname"><?php echo $row['cname'] ?></td>
                                                 <td class="td py-0 px-1 pcode"><?php echo $row['product_code'] ?></td>
-                                                <td class="td py-0 px-1 name"><?php echo $row['name']?></td>
+                                                <td class="td py-0 px-1 name"><?php echo $row['name'] ?></td>
                                                 <td class="td py-0 px-1 text-start price"><?php echo number_format($row['price'], 2) ?></td>
                                                 <td class="td py-0 px-1 text-start discount"><?php echo number_format($row['discount'], 2) ?></td>
                                                 <td class="td py-0 px-1 text-end qty"><?php echo $qty ?></td>

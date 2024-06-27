@@ -205,9 +205,9 @@ if ($pay_method == "all") {
             var el = $('<div>')
             el.append(h)
             if ('<?php echo $dfrom ?>' == '<?php echo $dto ?>') {
-                date_range = "<?php echo date('M d, Y', strtotime($dfrom)) ?>";
+                date_range = "<?php echo date('d M, Y', strtotime($dfrom)) ?>";
             } else {
-                date_range = "<?php echo date('M d, Y H:m:s', strtotime($dfrom)) . ' - ' . date('M d, Y H:m:s', strtotime($dto)) ?>";
+                date_range = "<?php echo date('d M, Y H:m:s', strtotime($dfrom)) . ' - ' . date('d M, Y H:m:s', strtotime($dto)) ?>";
             }
             el.append("<div class='text-center lh-1 fw-bold'> Top Bevery Sales Report<br/>As of<br/>" + date_range + "</div><hr/>")
             p.find('a').addClass('text-decoration-none')

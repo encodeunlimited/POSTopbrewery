@@ -119,7 +119,7 @@ if ($pay_method == "all") {
 
                         <tr>
                             <td class="text-center p-0"><?php echo $i++; ?></td>
-                            <td class="py-0 px-1"><?php echo date("Y-m-d H:m:s", strtotime($row['date_added'])) ?></td>
+                            <td class="py-0 px-1"><?php echo date("d-m-Y H:i:s", strtotime($row['date_added'])) ?></td>
                             <td class="py-0 px-1"><a href="javascript:void(0)" class="view_data" data-id="<?php echo $row['transaction_id'] ?>"><?php echo $row['receipt_no'] ?></a></td>
                             <td class="py-0 px-1 text-end"><?php echo number_format($items) ?></td>
                             <td class="py-0 px-1 text-end"><?php echo $row['customer'] ?></td>
@@ -208,9 +208,9 @@ if ($pay_method == "all") {
             var el = $('<div>')
             el.append(h)
             if ('<?php echo $dfrom ?>' == '<?php echo $dto ?>') {
-                date_range = "<?php echo date('M d, Y', strtotime($dfrom)) ?>";
+                date_range = "<?php echo date('d M, Y', strtotime($dfrom)) ?>";
             } else {
-                date_range = "<?php echo date('M d, Y H:m:s', strtotime($dfrom)) . ' - ' . date('M d, Y H:m:s', strtotime($dto)) ?>";
+                date_range = "<?php echo date('d M, Y H:m:s', strtotime($dfrom)) . ' - ' . date('d M, Y H:m:s', strtotime($dto)) ?>";
             }
             el.append("<div class='text-center lh-1 fw-bold'> Top Bevery Sales Report<br/>As of<br/>" + date_range + "</div><hr/>")
             p.find('a').addClass('text-decoration-none')

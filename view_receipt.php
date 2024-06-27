@@ -35,12 +35,13 @@ if (isset($_GET['id'])) {
 <div class="container-fluid">
     <div id="outprint_receipt">
         <div class="text-center fs-6 fs-bold">
-            <span><img src="image\logoabc.png" width='200' height='200'></span><br>
+            <span><img src="image\logoabc.png" width='100' height='100'></span><br>
             <span>
-                <h3 class="fw-bold">Top Brewery</h1>
+                <h6 class="fw-bold">201303306948 (002282392-A)</h6>
             </span>
-            <small style="line-height:normal;" class="fw-bold">Tel: +60196000671 | 0342856778</small><br>
-            <small style="line-height:normal;" class="fw-bold ">E-mail : topbrewery@gmail.com</small><br>
+            <small>Tel: 03-42856778 | 019-6000671</small><br>
+            <small>E-mail : topbrewery@gmail.com</small><br>
+            <small>No. 24, jalan bunga tanjung 8a, taman muda, 68000 ampang, selangor.</small><br>
         </div>
         <table class="table table-striped">
             <colgroup>
@@ -50,8 +51,7 @@ if (isset($_GET['id'])) {
             <thead>
                 <tr class="text-dark">
                     <th colspan="2" class="py-0 px-1" style="font-size: small; text-align: center;">
-                        <small class="fw-bold">No24. JLN BUNGA TANJUNG 8A</small><br>
-                        <small class="fw-bold">TMN MUDA 56100 SELANGOR</small>
+
                     </th>
                     <!-- <th class="py-0 px-1" style="font-size: small; text-align: center;"><small class="fw-bold">Bopitiya Branch<br>
                     <small class="fw-bold">No 115/5/A,Bopitiya,Pamunugama</small>
@@ -59,7 +59,7 @@ if (isset($_GET['id'])) {
                 </tr>
                 <tr>
                     <td style="font-size: small; text-align: left;">
-                        Date : <?php echo date("Y-m-d H:i:s", strtotime($date_added)) ?><br>
+                        Date : <?php echo date("d-m-Y H:i:s", strtotime($date_added)) ?><br>
                         Receipt No : <?php echo $receipt_no ?>
                     </td>
                     <td style="font-size: small; text-align: left;">
@@ -110,11 +110,11 @@ if (isset($_GET['id'])) {
             <tfoot>
                 <?php if (($t_discount != 0) || ($s_desc != 0)) : ?>
                     <tr>
-                    <th class="px-1 py-0 " colspan="3">Net Total</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($t_discount + $total, 2) ?></th>
-                </tr>
+                        <th class="px-1 py-0 " colspan="3">Net Total</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($t_discount + $total, 2) ?></th>
+                    </tr>
                 <?php endif; ?>
-                
+
                 <?php if ($t_discount != 0) : ?>
                     <tr>
                         <th class="px-1 py-0" colspan="3">Your Discount(-)</th>
@@ -156,7 +156,6 @@ if (isset($_GET['id'])) {
             </tfoot>
         </table>
         <div class="text-center">
-
             <span class="fw-bolder">Thank You, Come Again !</span><br>
             <small class="fw-bold lh-1">Software By</small><br>
             <small class="fw-bold lh-1">EncodeUnlimited | 0706291709 | www.encodeunlimited.com</small><br>
@@ -236,17 +235,17 @@ if (isset($_GET['id'])) {
     }
 
     $(document).ready(function() {
-            $('#openDrawerBtn').click(function() {
-                $.ajax({
-                    url: 'open_drawer.php',
-                    method: 'POST',
-                    success: function(response) {
-                        $('#responseMessage').text(response);
-                    },
-                    error: function(xhr, status, error) {
-                        $('#responseMessage').text('Error: ' + xhr.responseText);
-                    }
-                });
+        $('#openDrawerBtn').click(function() {
+            $.ajax({
+                url: 'open_drawer.php',
+                method: 'POST',
+                success: function(response) {
+                    $('#responseMessage').text(response);
+                },
+                error: function(xhr, status, error) {
+                    $('#responseMessage').text('Error: ' + xhr.responseText);
+                }
             });
         });
+    });
 </script>
