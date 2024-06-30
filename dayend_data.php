@@ -143,9 +143,23 @@
     require_once("DBConnection.php");
 
 
+
+
     // Retrieve parameters
-    $dfrom = isset($_GET['date_from']) ? str_replace('T', ' ', $_GET['date_from']) : date("Y-m-d H:i:s");
-    $dto = isset($_GET['date_to']) ? str_replace('T', ' ', $_GET['date_to']) : date("Y-m-d H:i:s");
+    $result = $conn->query("SELECT date_added FROM transaction_list_old ORDER BY date_added ASC LIMIT 1");
+    $fdate_row = $result->fetchArray(SQLITE3_ASSOC);
+    $fdate = $fdate_row ? $fdate_row['date_added'] : null;
+
+    // Fetch the last date_added as a string
+    $result = $conn->query("SELECT date_added FROM transaction_list_old ORDER BY date_added DESC LIMIT 1");
+    $ldate_row = $result->fetchArray(SQLITE3_ASSOC);
+    $ldate = $ldate_row ? $ldate_row['date_added'] : null;
+
+    $dfrom = $fdate ? date("Y-m-d H:i:s", strtotime($fdate)) : date("Y-m-d H:i:s");
+    $dto = $ldate ? date("Y-m-d H:i:s", strtotime($ldate)) : date("Y-m-d H:i:s");
+
+    // echo $fdate ." / ".$ldate;
+    // echo $dfrom ." / ".$dto;
     $sql = "SELECT t.*, u.fullname 
     FROM transaction_list t 
     INNER JOIN user_list u ON t.user_id = u.user_id 
@@ -160,11 +174,10 @@
     $payment_type_counts = []; // Array to hold payment type-wise item counts and total amounts
     $t_discount_count = 0;
     $t_discount_sum = 0.0;
-    $gross_total = 0.0;
-    $net_total = 0.0;
     $s_desc_count = 0;
     $s_desc_sum = 0.0;
-    $gross_total = 0.0;  // To hold the sum of all transaction totals
+    $gross_total = 0.0;
+    $net_total = 0.0;  // To hold the sum of all transaction totals
     $gross_item_count = 0;  // To hold the total count of items across all transactions
     $gross_profit_sum = 0.0;  // To hold the sum of all t_profit values
 

@@ -58,13 +58,29 @@ if ($pay_method == "all") {
                 <div class="col-auto">
                     <button class="btn btn-primary rounded-0" id="filter" type="button"><i class="fa fa-filter"></i> Filter</button>
                     <button class="btn btn-success rounded-0" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-                    
-                    <button class="btn btn-dark btn-sm py-1 rounded-0" type="button" id="print_data">Print Data</button>
-                    <button class="btn btn-dark btn-sm py-1 rounded-0" type="button" id="print_data_tax">Print TAX</button>
+
+                    <!-- <?php if ($_SESSION['type'] == 1) { ?>
+                    <?php }  ?> -->
+                </div>
+
+            </div>
+            <div class="form-group col-md-4 d-flex">
+                <div class="col-auto">
+                    <br />
+                    <button class="btn btn-outline-success" type="button" id="print_data">Print Summery</button>
+                    <button class="btn btn-outline-success" type="button" id="print_data_tax">Print Summery TAX</button>
+
+                    <button class="btn btn-outline-secondary" type="button" id="view_data">View Summery</button>
+                    <button class="btn btn-outline-secondary" type="button" id="view_data_tax">View Summery TAX</button>
+
+                    <button type="submit" id="move_data" name="move_data" class="btn btn-warning">View Day End Summery</button>
+                    <button type="submit" id="pmove_data" name="pmove_data" class="btn btn-danger">Day End Process</button>
+
                     <!-- <?php if ($_SESSION['type'] == 1) { ?>
                     <?php }  ?> -->
 
                 </div>
+
             </div>
         </div>
         <hr>
@@ -299,5 +315,75 @@ if ($pay_method == "all") {
             printWindow.print();
         });
     });
-    
+
+    $(document).ready(function() {
+        $('#view_data').click(function() {
+            // Retrieve values of elements
+            var date_from = $('#date_from').val(); // Assuming you have input fields with ids 'date_from' and 'date_to'
+            var date_to = $('#date_to').val();
+            var payment_method = $('#payment_method').val(); // Assuming you have a select element with id 'payment_method'
+
+            // Construct URL with query parameters
+            var url = 'process_data.php?date_from=' + encodeURIComponent(date_from) +
+                '&date_to=' + encodeURIComponent(date_to) +
+                '&payment_method=' + encodeURIComponent(payment_method);
+
+            // Open a new window with the constructed URL
+            var printWindow = window.open(url, '_blank');
+            // printWindow.focus();
+            // printWindow.print();
+        });
+    });
+
+    $(document).ready(function() {
+        $('#view_data_tax').click(function() {
+            // Retrieve values of elements
+            var date_from = $('#date_from').val(); // Assuming you have input fields with ids 'date_from' and 'date_to'
+            var date_to = $('#date_to').val();
+            var payment_method = $('#payment_method').val(); // Assuming you have a select element with id 'payment_method'
+
+            // Construct URL with query parameters
+            var url = 'process_data_tax.php?date_from=' + encodeURIComponent(date_from) +
+                '&date_to=' + encodeURIComponent(date_to) +
+                '&payment_method=' + encodeURIComponent(payment_method);
+
+            // Open a new window with the constructed URL
+            var printWindow = window.open(url, '_blank');
+            // printWindow.focus();
+            // printWindow.print();
+        });
+    });
+
+    $(document).ready(function() {
+
+        $('#move_data').click(function() {
+            // Open a new window with print_inventory.php
+            var printWindow = window.open('dayend_data.php', '_blank');
+        });
+    });
+
+    $(document).ready(function() {
+
+        $('#pmove_data').click(function() {
+            // Open a new window with print_inventory.php
+            var printWindow = window.open('dayend_data.php', '_blank');
+            printWindow.focus();
+            printWindow.print();
+
+            $.ajax({
+                url: 'day_end_process_data.php',
+                type: 'POST',
+                data: {
+                    move_data: true
+                },
+                success: function(response) {
+                    // alert(response);
+                },
+                error: function(xhr, status, error) {
+                    // console.error(error);
+                    // alert('Failed to move data: ' + error);
+                }
+            });
+        });
+    });
 </script>

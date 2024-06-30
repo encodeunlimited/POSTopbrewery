@@ -497,6 +497,7 @@ class Actions extends DBConnection
         }
         if (empty($id)) {
             $sql = "INSERT INTO `transaction_list` ({$cols_join}) VALUES ({$vals_join})";
+            $sql1 = "INSERT INTO `transaction_list_old` ({$cols_join}) VALUES ({$vals_join})";
         } else {
             $sql = "UPDATE `transaction_list` SET {$data} WHERE stock_id = '{$id}'";
         }
@@ -521,6 +522,7 @@ class Actions extends DBConnection
                 $this->query("DELETE FROM transaction_items WHERE transaction_id = '{$tid}'");
             $sql = "INSERT INTO transaction_items (`transaction_id`,`product_id`,`quantity`,`discount`,`price`,`profit`,`date_added`) VALUES {$data}";
             $save = $this->query($sql);
+            $save = $this->query($sql1);
             $resp['transaction_id'] = $tid;
         } else {
             $resp['status'] = "failed";
@@ -538,7 +540,8 @@ class Actions extends DBConnection
         extract($_POST);
 
         @$delete = $this->query("DELETE FROM `transaction_list` where transaction_id = '{$id}'");
-        if ($delete) {
+        @$delete1 = $this->query("DELETE FROM `transaction_list_old` where receipt_no = '{$rno}'");
+        if ($delete && $delete1) {
             $resp['status'] = 'success';
             $_SESSION['flashdata']['type'] = 'success';
             $_SESSION['flashdata']['msg'] = 'Transaction successfully deleted.';

@@ -204,18 +204,19 @@ if (isset($_GET['id'])) {
         })
         $('#uni_modal').modal('hide')
         $('#delete_data').click(function() {
-            _conf("Are you sure to Refund <b>" + <?php echo $receipt_no ?> + "</b>?", 'delete_data', ['<?php echo $transaction_id ?>'])
+            _conf("Are you sure to Refund <b>" + <?php echo $receipt_no ?> + "</b>?", 'delete_data', ['<?php echo $transaction_id ?>', '<?php echo $receipt_no ?>'])
         })
     })
 
 
-    function delete_data($id) {
+    function delete_data($id,$rno) {
         $('#confirm_modal button').attr('disabled', true)
         $.ajax({
             url: './Actions.php?a=delete_transaction',
             method: 'POST',
             data: {
-                id: $id
+                id: $id,
+                rno : $rno
             },
             dataType: 'JSON',
             error: err => {
