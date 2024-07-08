@@ -57,7 +57,7 @@
     </div>
     <div class="form-group">
         <label for="tender" class="control-label fs-4 fw-bold">Tendered Amount</label>
-        <input type="number" step="any" id="tender" class="form-control form-control-lg text-end" value="0">
+        <input type="number" step="any" id="tender" class="form-control form-control-lg text-end" value="0" disabled>
     </div>
     <div class="w-100 d-flex justify-content-end mt-2">
         <button class="btn btn-sm btn-primary me-2 rounded-0" type="button" id="save_trans">Save</button>
@@ -117,6 +117,25 @@
     //     })
     // })
 
+    $(document).ready(function() {
+
+        $('#payment-methods button').click(function() {
+            var method = $(this).data('method');
+            if (method === 'cash') {
+                $('#tender').prop('disabled', false);
+                // $('#tender').focus();
+                $('#tender').on('focus', function() {
+                    // Reset form fields
+                    $('#tender').val('');
+                });
+            } else {
+                $('#tender').prop('disabled', true);
+                $('#save_trans').focus();
+            }
+        });
+        // $('[data-method="cash"]').click();
+    });
+
     $(function() {
         $('#uni_modal').on('shown.bs.modal', function() {
             if ($('#tender').length > 0)
@@ -133,6 +152,7 @@
 
         // Handle input change on #tender
         $('#tender').on('input', function() {
+
             var tender = $(this).val() > 0 ? $(this).val() : 0;
             var amount = $('#amount').val().replace(/,/gi, "");
             var ts_profit = $('#tprofit').val();
@@ -147,6 +167,7 @@
             $('[name="s_desc"]').val(parseFloat(s_des));
             $('[name="t_profit"]').val(parseFloat(tt_profit));
             updateForm();
+            // $('#save_trans').focus();
         });
 
         // Focus out event on #tender
@@ -167,7 +188,7 @@
             $('#change').removeClass('border-danger');
             if ($('[name="change"]').val() < 0) {
                 $('#change').addClass('border-danger');
-            } else if ($('[name="tendered_amount"]').val() <= 0) {
+            } else if ($('[name="tendered_amount"]').val() < 0) {
                 $('#tender').trigger('focus');
             } else {
                 $('#uni_modal').modal('hide');

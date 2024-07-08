@@ -167,7 +167,8 @@ if (isset($_GET['id'])) {
             <button class="btn btn-sm btn-danger me-2 rounded-0" type="button" id="delete_data"><i class="fa fa-undo"></i> Refund</button>
         <?php endif; ?>
         <button class="btn btn-sm btn-success me-2 rounded-0" type="button" id="print_receipt"><i class="fa fa-print"></i> Print</button>
-        <button id="openDrawerBtn" class="btn btn-sm btn-dark rounded-0" type="button" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-sm btn-warning me-2 rounded-0" id="openDrawerBtn"><i class="fa sign-out-alt"></i> Eject</button>
+        <button class="btn btn-sm btn-dark rounded-0" type="button" data-bs-dismiss="modal">Close</button>
     </div>
 
 </div>
@@ -209,14 +210,14 @@ if (isset($_GET['id'])) {
     })
 
 
-    function delete_data($id,$rno) {
+    function delete_data($id, $rno) {
         $('#confirm_modal button').attr('disabled', true)
         $.ajax({
             url: './Actions.php?a=delete_transaction',
             method: 'POST',
             data: {
                 id: $id,
-                rno : $rno
+                rno: $rno
             },
             dataType: 'JSON',
             error: err => {
@@ -237,16 +238,17 @@ if (isset($_GET['id'])) {
 
     $(document).ready(function() {
         $('#openDrawerBtn').click(function() {
-            $.ajax({
-                url: 'open_drawer.php',
-                method: 'POST',
-                success: function(response) {
-                    $('#responseMessage').text(response);
-                },
-                error: function(xhr, status, error) {
-                    $('#responseMessage').text('Error: ' + xhr.responseText);
-                }
-            });
+            var printWindow = window.open('open_drawer.html');
+
+            // Wait until the new window loads completely
+            printWindow.onload = function() {
+                // Print the content of the new window
+                printWindow.print();
+                // Close the new window after printing with a delay
+                setTimeout(function() {
+                    printWindow.close();
+                }, 100); // 2000 milliseconds = 2 seconds delay
+            };
         });
     });
 </script>
