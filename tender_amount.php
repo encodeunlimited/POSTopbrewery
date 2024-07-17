@@ -52,8 +52,8 @@
         <input type="hidden" id="discount" class="form-control form-control-lg text-end" value="100" disabled>
     </div>
     <div class="form-group">
-        <label for="arrears" class="control-label fs-4 fw-bold">Amount in arrears</label>
-        <input type="number" step="any" id="arrears" class="form-control form-control-lg text-end" value="0">
+        <!-- <label for="arrears" class="control-label fs-4 fw-bold">Amount in arrears</label> -->
+        <input type="hidden" step="any" id="arrears" class="form-control form-control-lg text-end" value="0">
     </div>
     <div class="form-group">
         <label for="tender" class="control-label fs-4 fw-bold">Tendered Amount</label>

@@ -108,26 +108,38 @@ if (isset($_GET['id'])) {
                 <?php endwhile; ?>
             </tbody>
             <tfoot>
-                <?php if (($t_discount != 0) || ($s_desc != 0)) : ?>
+                <?php if (($t_discount + $s_desc) != 0) { ?>
+                    <tr>
+                        <th class="px-1 py-0 " colspan="3">Gross Total</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($total, 2) ?></th>
+                    </tr>
+                <?php } else { ?>
                     <tr>
                         <th class="px-1 py-0 " colspan="3">Net Total</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($t_discount + $total, 2) ?></th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($total, 2) ?></th>
                     </tr>
-                <?php endif; ?>
+
+                <?php } ?>
 
                 <?php if ($t_discount != 0) : ?>
+
                     <tr>
                         <th class="px-1 py-0" colspan="3">Your Discount(-)</th>
                         <th class="px-1 py-0 text-end"><?php echo number_format($t_discount, 2) ?></th>
                     </tr>
+                    <tr>
+                        <th class="px-1 py-0" colspan="3">Net Total</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($total - $t_discount, 2) ?></th>
+                    </tr>
                 <?php endif; ?>
                 <?php if ($s_desc != 0) : ?>
+
                     <tr>
                         <th class="px-1 py-0" colspan="3">Special Discount(-)</th>
                         <th class="px-1 py-0 text-end"><?php echo number_format($s_desc, 2) ?></th>
                     </tr>
                     <tr>
-                        <th class="px-1 py-0" colspan="3">Total</th>
+                        <th class="px-1 py-0" colspan="3">Net Total</th>
                         <th class="px-1 py-0 text-end"><?php echo number_format($total - $s_desc, 2) ?></th>
                     </tr>
                 <?php endif; ?>
@@ -141,10 +153,7 @@ if (isset($_GET['id'])) {
                         <th class="px-1 py-0 text-end"><?php echo number_format($total - $arrears, 2) ?></th>
                     </tr>
                 <?php endif; ?>
-                <tr>
-                    <th class="px-1 py-0 " colspan="3">Gross Total</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($total, 2) ?></th>
-                </tr>
+
                 <!-- <tr>
                     <th class="px-1 py-0" colspan="3">Tendered</th>
                     <th class="px-1 py-0 text-end"><?php echo number_format($tendered_amount, 2) ?></th>

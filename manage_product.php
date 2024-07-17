@@ -87,53 +87,113 @@ if (isset($_GET['id'])) {
 </div>
 
 <script>
-    $(function() {
-        $('#product-form').submit(function(e) {
-            e.preventDefault();
-            $('.pop_msg').remove()
-            var _this = $(this)
-            var _el = $('<div>')
-            _el.addClass('pop_msg')
-            $('#uni_modal button').attr('disabled', true)
-            $('#uni_modal button[type="submit"]').text('submitting form...')
-            $.ajax({
-                url: './Actions.php?a=save_product',
-                data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-                error: err => {
-                    console.log(err)
-                    _el.addClass('alert alert-danger')
-                    _el.text("An error occurred.")
-                    _this.prepend(_el)
-                    _el.show('slow')
-                    $('#uni_modal button').attr('disabled', false)
-                    $('#uni_modal button[type="submit"]').text('Save')
-                },
-                success: function(resp) {
-                    if (resp.status == 'success') {
-                        _el.addClass('alert alert-success')
-                        $('#uni_modal').on('hide.bs.modal', function() {
-                            location.reload()
-                        })
-                        if ("<?php echo isset($product_id) ?>" != 1)
-                            _this.get(0).reset();
-                    } else {
-                        _el.addClass('alert alert-danger')
-                    }
-                    _el.text(resp.msg)
 
-                    _el.hide()
-                    _this.prepend(_el)
-                    _el.show('slow')
-                    $('#uni_modal button').attr('disabled', false)
-                    $('#uni_modal button[type="submit"]').text('Save')
+    // $(function() {
+    //     $('#product-form').submit(function(e) {
+    //         e.preventDefault();
+    //         $('.pop_msg').remove()
+    //         var _this = $(this)
+    //         var _el = $('<div>')
+    //         _el.addClass('pop_msg')
+    //         $('#uni_modal button').attr('disabled', true)
+    //         $('#uni_modal button[type="submit"]').text('submitting form...')
+    //         $.ajax({
+    //             url: './Actions.php?a=save_product',
+    //             data: new FormData($(this)[0]),
+    //             cache: false,
+    //             contentType: false,
+    //             processData: false,
+    //             method: 'POST',
+    //             type: 'POST',
+    //             dataType: 'json',
+    //             error: err => {
+    //                 console.log(err)
+    //                 _el.addClass('alert alert-danger')
+    //                 _el.text("An error occurred.")
+    //                 _this.prepend(_el)
+    //                 _el.show('slow')
+    //                 $('#uni_modal button').attr('disabled', false)
+    //                 $('#uni_modal button[type="submit"]').text('Save')
+    //             },
+    //             success: function(resp) {
+    //                 if (resp.status == 'success') {
+    //                     _el.addClass('alert alert-success')
+    //                     $('#uni_modal').on('hide.bs.modal', function() {
+    //                         location.reload()
+    //                     })
+    //                     if ("<?php echo isset($product_id) ?>" != 1)
+    //                         _this.get(0).reset();
+    //                 } else {
+    //                     _el.addClass('alert alert-danger')
+    //                 }
+    //                 _el.text(resp.msg)
+
+    //                 _el.hide()
+    //                 _this.prepend(_el)
+    //                 _el.show('slow')
+    //                 $('#uni_modal button').attr('disabled', false)
+    //                 $('#uni_modal button[type="submit"]').text('Save')
+    //             }
+    //         })
+    //     })
+    // })
+
+    $(function() {
+    $('#product-form').submit(function(e) {
+        e.preventDefault();
+        $('.pop_msg').remove();
+
+        // Check all number input fields and set their value to '0' if they are empty
+        $(this).find('input[type="number"]').each(function() {
+            if ($(this).val() === '') {
+                $(this).val('0');
+            }
+        });
+
+        var _this = $(this);
+        var _el = $('<div>');
+        _el.addClass('pop_msg');
+        $('#uni_modal button').attr('disabled', true);
+        $('#uni_modal button[type="submit"]').text('submitting form...');
+        
+        $.ajax({
+            url: './Actions.php?a=save_product',
+            data: new FormData($(this)[0]),
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            dataType: 'json',
+            error: err => {
+                console.log(err);
+                _el.addClass('alert alert-danger');
+                _el.text("An error occurred.");
+                _this.prepend(_el);
+                _el.show('slow');
+                $('#uni_modal button').attr('disabled', false);
+                $('#uni_modal button[type="submit"]').text('Save');
+            },
+            success: function(resp) {
+                if (resp.status == 'success') {
+                    _el.addClass('alert alert-success');
+                    $('#uni_modal').on('hide.bs.modal', function() {
+                        location.reload();
+                    });
+                    if ("<?php echo isset($product_id) ?>" != 1)
+                        _this.get(0).reset();
+                } else {
+                    _el.addClass('alert alert-danger');
                 }
-            })
-        })
-    })
+                _el.text(resp.msg);
+
+                _el.hide();
+                _this.prepend(_el);
+                _el.show('slow');
+                $('#uni_modal button').attr('disabled', false);
+                $('#uni_modal button[type="submit"]').text('Save');
+            }
+        });
+    });
+});
 </script>

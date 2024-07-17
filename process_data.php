@@ -207,12 +207,13 @@
         if ($row['s_desc'] > 0) {
             $s_desc_count++;
             $s_desc_sum += $row['s_desc'];
+            // $net_total = $gross_total-$s_desc_sum;
         }
 
         // Aggregate gross profit
         $gross_profit_sum += $row['t_profit'];
 
-        $net_total = $gross_total - $t_discount_sum;
+        
 
         // Get product-wise count for the transaction with product names
         $product_query = $conn->query("SELECT pl.product_id, pl.name as product_name, SUM(ti.quantity) as `count` 
@@ -371,6 +372,7 @@
                     ?>
 
                 </tbody>
+                <?php $net_total = $gross_total - $t_discount_sum-$s_desc_sum; ?>
                 <tfoot>
                     <tr>
                         <th class="px-1 py-0">Gross Total</th>
@@ -378,9 +380,17 @@
                         <th class="px-1 py-0 "><?php echo number_format($gross_total, 2) ?></th>
                     </tr>
                     <tr>
+                        <th class="px-1 py-0">Discount Total (-)</th>
+                        <th class="px-1 py-0 "><?php echo($t_discount_count + $s_desc_count +$refund_item_count) ?></th>
+                        <th class="px-1 py-0 "><?php echo number_format($t_discount_sum + $s_desc_sum + $refund_total, 2) ?></th>
+                    </tr>
+                    <tr>
                         <th class="px-1 py-0">Net Total</th>
                         <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
                         <th class="px-1 py-0 "><?php echo number_format($net_total, 2) ?></th>
+                    </tr>
+                    <tr>
+                        <th></th><th></th><th></th>
                     </tr>
                     <tr>
                         <th class="px-1 py-0">Gross Profit</th>
@@ -419,10 +429,20 @@
 
                 </tbody>
                 <tfoot>
-                    <tr>
+                <tr>
                         <th class="px-1 py-0">Gross Total</th>
                         <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
                         <th class="px-1 py-0 "><?php echo number_format($gross_total, 2) ?></th>
+                    </tr>
+                    <tr>
+                        <th class="px-1 py-0">Discount Total (-)</th>
+                        <th class="px-1 py-0 "><?php echo($t_discount_count + $s_desc_count +$refund_item_count) ?></th>
+                        <th class="px-1 py-0 "><?php echo number_format($t_discount_sum + $s_desc_sum + $refund_total, 2) ?></th>
+                    </tr>
+                    <tr>
+                        <th class="px-1 py-0">Net Total</th>
+                        <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
+                        <th class="px-1 py-0 "><?php echo number_format($net_total, 2) ?></th>
                     </tr>
                 </tfoot>
             </table>
@@ -445,7 +465,7 @@
                         <td class="px-1 py-0 align-middle"><?php echo "Item Discount" ?></td>
                         <td class="px-1 py-0 align-middle"><?php echo $t_discount_count ?></td>
                         <td class="px-1 py-0 align-middle"><?php echo number_format($t_discount_sum, 2) ?></td>
-
+                        
                     </tr>
                     <tr>
                         <td class="px-1 py-0 align-middle"><?php echo "Special Discount" ?></td>

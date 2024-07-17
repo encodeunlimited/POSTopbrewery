@@ -277,7 +277,7 @@
         $refund_total += $refund_items['total'];
     }
 
-    $net_total = $gross_total - $t_discount_sum;
+    
 
     ?>
 
@@ -409,11 +409,17 @@
                     ?>
 
                 </tbody>
+                <?php $net_total = $gross_total - $t_discount_sum-$s_desc_sum; ?>
                 <tfoot>
                     <tr>
                         <th class="px-1 py-0">Gross Total</th>
                         <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
                         <th class="px-1 py-0 "><?php echo number_format($gross_total, 2) ?></th>
+                    </tr>
+                    <tr>
+                        <th class="px-1 py-0">Discount Total (-)</th>
+                        <th class="px-1 py-0 "><?php echo ($t_discount_count + $s_desc_count + $refund_item_count) ?></th>
+                        <th class="px-1 py-0 "><?php echo number_format($t_discount_sum + $s_desc_sum + $refund_total, 2) ?></th>
                     </tr>
                     <tr>
                         <th class="px-1 py-0">Net Total</th>

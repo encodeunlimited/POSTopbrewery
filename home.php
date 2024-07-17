@@ -98,6 +98,7 @@
     <div class="row">
         <div class="col-12">
             <button class="btn btn-dark btn-sm py-1 rounded-0" type="button" id="print_data">Print Data</button>
+            <button class="btn btn-dark btn-sm py-1 rounded-0" type="button" id="print_data_s">Special Print Data</button>
             <h3>Stock Available</h3>
             <hr>
             <table class="table table-striped table-hover" id="inventory">
@@ -196,6 +197,12 @@
         $('#print_data').click(function() {
             // Open a new window with print_inventory.php
             var printWindow = window.open('print_inventory.php', '_blank');
+            // printWindow.focus();
+            printWindow.print();
+        });
+        $('#print_data_s').click(function() {
+            // Open a new window with print_inventory.php
+            var printWindow = window.open('s_print_inventory.php', '_blank');
             // printWindow.focus();
             printWindow.print();
         });
