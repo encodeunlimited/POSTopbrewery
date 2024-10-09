@@ -160,12 +160,11 @@
 
     // echo $fdate ." / ".$ldate;
     // echo $dfrom ." / ".$dto;
-    $sql = "SELECT t.*, u.fullname 
-    FROM transaction_list t 
-    INNER JOIN user_list u ON t.user_id = u.user_id 
-    WHERE strftime('%Y-%m-%d %H:%M:%S', t.date_added) 
+    $sql = "SELECT *
+    FROM transaction_list
+    WHERE strftime('%Y-%m-%d %H:%M:%S',date_added) 
     BETWEEN '{$dfrom}' AND '{$dto}' 
-    ORDER BY strftime('%s', t.date_added) DESC;";
+    ORDER BY strftime('%s', date_added) DESC;";
     $qry = $conn->query($sql);
 
     $tot_item = 0;
@@ -280,23 +279,39 @@
     // }
 
     // Get refund data from refund_transaction_list and refund_transaction_items
-    $refund_sql = "SELECT r.*, u.fullname 
-               FROM refund_transaction_list r 
-               INNER JOIN user_list u ON r.user_id = u.user_id 
-               WHERE strftime('%Y-%m-%d %H:%M:%S', r.date_added) 
-               BETWEEN '{$dfrom}' AND '{$dto}' 
-               ORDER BY strftime('%s', r.date_added) DESC;";
+    // Assuming $conn is a valid SQLite3 connection and $dfrom and $dto are properly set
+
+    // Initialize variables
+    $refund_item_count = 0;
+    $refund_total = 0.0;
+
+    // Define the query to fetch refund transactions within the date range
+    $refund_sql = "SELECT *
+    FROM refund_transaction_list 
+    WHERE strftime('%Y-%m-%d %H:%M:%S', date_added) 
+    BETWEEN '{$dfrom}' AND '{$dto}' 
+    ORDER BY strftime('%s', date_added) DESC";
+
+    // Execute the query
     $refund_qry = $conn->query($refund_sql);
 
-    while ($refund_row = $refund_qry->fetchArray()) {
-        $refund_items = $conn->query("SELECT SUM(quantity) as `count`, SUM(price * quantity) as `total`
-                                  FROM `refund_transaction_items`
-                                  WHERE transaction_id = '{$refund_row['transaction_id']}'")->fetchArray();
+    // Iterate over each row in the result set
+    while ($refund_row = $refund_qry->fetchArray(SQLITE3_ASSOC)) {
+        // Fetch the sum of quantities and total price for the current transaction
+        $transaction_id = $refund_row['transaction_id'];
+        $refund_items_sql = "SELECT SUM(quantity) as `count`, SUM(price * quantity) as `total`
+                         FROM `refund_transaction_items`
+                         WHERE transaction_id = '{$transaction_id}'";
+        $refund_items = $conn->query($refund_items_sql)->fetchArray(SQLITE3_ASSOC);
+
+        // Accumulate the results
         $refund_item_count += $refund_items['count'];
         $refund_total += $refund_items['total'];
     }
 
-    
+    // Output the results
+    // echo $refund_item_count . " " . $refund_total;
+
 
     ?>
 
@@ -386,7 +401,7 @@
                     ?>
 
                 </tbody>
-                <?php $net_total = $gross_total - $t_discount_sum-$s_desc_sum; ?>
+                <?php $net_total = $gross_total - $t_discount_sum - $s_desc_sum; ?>
                 <tfoot>
                     <tr>
                         <th class="px-1 py-0">Gross Total</th>
@@ -396,14 +411,18 @@
                     <tr>
                         <th class="px-1 py-0">Discount Total (-)</th>
                         <th class="px-1 py-0 "><?php echo ($t_discount_count + $s_desc_count + $refund_item_count) ?></th>
-                        <th class="px-1 py-0 "><?php echo number_format($t_discount_sum + $s_desc_sum + $refund_total, 2) ?></th>
+                        <th class="px-1 py-0 "><?php echo number_format($t_discount_sum + $s_desc_sum, 2) ?></th>
                     </tr>
                     <tr>
                         <th class="px-1 py-0">Net Total</th>
                         <th class="px-1 py-0 "><?php echo $gross_item_count ?></th>
                         <th class="px-1 py-0 "><?php echo number_format($net_total, 2) ?></th>
                     </tr>
-                    <tr><th></th><th></th><th></th></tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
                     <tr>
                         <th class="px-1 py-0">Gross Profit</th>
                         <th class="px-1 py-0 "></th>
@@ -449,7 +468,7 @@
                     <tr>
                         <th class="px-1 py-0">Discount Total (-)</th>
                         <th class="px-1 py-0 "><?php echo ($t_discount_count + $s_desc_count + $refund_item_count) ?></th>
-                        <th class="px-1 py-0 "><?php echo number_format($t_discount_sum + $s_desc_sum + $refund_total, 2) ?></th>
+                        <th class="px-1 py-0 "><?php echo number_format($t_discount_sum + $s_desc_sum, 2) ?></th>
                     </tr>
                     <tr>
                         <th class="px-1 py-0">Net Total</th>

@@ -129,6 +129,7 @@
                     $('#tender').val('');
                 });
             } else {
+
                 $('#tender').prop('disabled', true);
                 $('#save_trans').focus();
             }
@@ -150,6 +151,25 @@
             }
         });
 
+        $('#s_des').on('input', function() {
+
+            var s_des = $(this).val() > 0 ? $(this).val() : 0;
+            var amount = $('#amount').val().replace(/,/gi, "");
+            var ts_profit = $('#tprofit').val();
+            var tt_profit = parseFloat(ts_profit) - parseFloat(s_des);
+            var change = 0;
+            $('#change').val(0);
+
+            // Update form fields
+            $('#change').val(parseFloat(change).toLocaleString('en-US'));
+            $('[name="change"]').val(parseFloat(change));
+            $('[name="s_desc"]').val(parseFloat(s_des));
+            $('[name="t_profit"]').val(parseFloat(tt_profit));
+            $('[name="total"]').val(parseFloat(amount-s_des));
+            updateForm();
+            // $('#save_trans').focus();
+        });
+
         // Handle input change on #tender
         $('#tender').on('input', function() {
 
@@ -166,6 +186,7 @@
             $('[name="change"]').val(parseFloat(change));
             $('[name="s_desc"]').val(parseFloat(s_des));
             $('[name="t_profit"]').val(parseFloat(tt_profit));
+            $('[name="total"]').val(parseFloat(amount-s_des));
             updateForm();
             // $('#save_trans').focus();
         });

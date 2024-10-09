@@ -76,8 +76,8 @@
 
                                 <?php
                                 //$stock_in = $conn->query("SELECT sum(quantity) as `total` FROM `stock_list` s inner join 'product_list' p on s.product_id = p.product_id where p.category_id NOT IN ( 209) ")->fetchArray()['total'];
-                                $stock_in = $conn->query("SELECT sum(quantity) as `total` FROM `stock_list` s inner join 'product_list' p on s.product_id = p.product_id where p.category_id NOT IN (144,209) ")->fetchArray()['total'];
-                                $stock_out = $conn->query("SELECT sum(quantity) as `total` FROM `transaction_items` s inner join 'product_list' p on s.product_id = p.product_id where p.category_id NOT IN (144,209)  ")->fetchArray()['total'];
+                                $stock_in = $conn->query("SELECT sum(quantity) as `total` FROM `itransaction_items` s inner join 'product_list' p on s.product_id = p.product_id where p.category_id NOT IN (144,209) ")->fetchArray()['total'];
+                                $stock_out = $conn->query("SELECT sum(quantity) as `total` FROM `otransaction_items` s inner join 'product_list' p on s.product_id = p.product_id where p.category_id NOT IN (144,209)  ")->fetchArray()['total'];
                                 $stock_in = $stock_in > 0 ? $stock_in : 0;
                                 $stock_out = $stock_out > 0 ? $stock_out : 0;
                                 $qty = $stock_in - $stock_out;
@@ -135,12 +135,12 @@
                     $sql = "SELECT p.*,c.name as cname FROM `product_list` p inner join `category_list` c on p.category_id = c.category_id where p.status = 1 AND p.category_id NOT IN (209) order by `name` asc";
                     $qry = $conn->query($sql);
                     while ($row = $qry->fetchArray()) {
-                        $stock_in = $conn->query("SELECT sum(quantity) as `total` FROM `stock_list` where strftime('%s',`expiry_date` || '23:59:59') >= strftime('%s',CURRENT_TIMESTAMP) and product_id = '{$row['product_id']}' ")->fetchArray()['total'];
+                        $stock_in = $conn->query("SELECT sum(quantity) as `total` FROM `itransaction_items` where product_id = '{$row['product_id']}' ")->fetchArray()['total'];
 
                         $stock_out = 0;
 
                         // Calculate stock out
-                        $sql1 = "SELECT c.*, p.product_code as pcode FROM `product_list` p INNER JOIN `transaction_items` c ON p.product_id = c.product_id WHERE p.status = 1 ORDER BY `name` ASC";
+                        $sql1 = "SELECT c.*, p.product_code as pcode FROM `product_list` p INNER JOIN `otransaction_items` c ON p.product_id = c.product_id WHERE p.status = 1 ORDER BY `name` ASC";
                         $qry1 = $conn->query($sql1);
 
                         while ($row1 = $qry1->fetchArray()) {

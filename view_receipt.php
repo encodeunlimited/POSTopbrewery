@@ -111,8 +111,31 @@ if (isset($_GET['id'])) {
                 <?php if (($t_discount + $s_desc) != 0) { ?>
                     <tr>
                         <th class="px-1 py-0 " colspan="3">Gross Total</th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format($total + $t_discount + $s_desc, 2) ?></th>
+                    </tr>
+
+                    <?php if ($t_discount != 0) : ?>
+
+                        <tr>
+                            <th class="px-1 py-0" colspan="3">Your Discount(-)</th>
+                            <th class="px-1 py-0 text-end"><?php echo number_format($t_discount, 2) ?></th>
+                        </tr>
+                    <?php endif; ?>
+
+                    <?php if ($s_desc != 0) : ?>
+
+                        <tr>
+                            <th class="px-1 py-0" colspan="3">Special Discount(-)</th>
+                            <th class="px-1 py-0 text-end"><?php echo number_format($s_desc, 2) ?></th>
+                        </tr>
+
+                    <?php endif; ?>
+
+                    <tr>
+                        <th class="px-1 py-0" colspan="3">Net Total</th>
                         <th class="px-1 py-0 text-end"><?php echo number_format($total, 2) ?></th>
                     </tr>
+
                 <?php } else { ?>
                     <tr>
                         <th class="px-1 py-0 " colspan="3">Net Total</th>
@@ -121,28 +144,8 @@ if (isset($_GET['id'])) {
 
                 <?php } ?>
 
-                <?php if ($t_discount != 0) : ?>
 
-                    <tr>
-                        <th class="px-1 py-0" colspan="3">Your Discount(-)</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($t_discount, 2) ?></th>
-                    </tr>
-                    <tr>
-                        <th class="px-1 py-0" colspan="3">Net Total</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($total - $t_discount, 2) ?></th>
-                    </tr>
-                <?php endif; ?>
-                <?php if ($s_desc != 0) : ?>
 
-                    <tr>
-                        <th class="px-1 py-0" colspan="3">Special Discount(-)</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($s_desc, 2) ?></th>
-                    </tr>
-                    <tr>
-                        <th class="px-1 py-0" colspan="3">Net Total</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($total - $s_desc, 2) ?></th>
-                    </tr>
-                <?php endif; ?>
                 <?php if ($arrears != 0) : ?>
                     <tr>
                         <th class="px-1 py-0" colspan="3">Your Arrears(-)</th>

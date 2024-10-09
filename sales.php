@@ -89,13 +89,20 @@
 
                                         while ($row = $qry->fetchArray()) {
                                             // Calculate stock in
-                                            $stock_in = $conn->query("SELECT SUM(quantity) as `total` FROM `stock_list` WHERE strftime('%s', `expiry_date` || '23:59:59') >= strftime('%s', CURRENT_TIMESTAMP) AND product_id = '{$row['product_id']}'")->fetchArray()['total'];
+                                            // $stock_in = $conn->query("SELECT SUM(quantity) as `total` FROM `itransaction_items` WHERE strftime('%s', `expiry_date` || '23:59:59') >= strftime('%s', CURRENT_TIMESTAMP) AND product_id = '{$row['product_id']}'")->fetchArray()['total'];
+                                            $stock_in = $conn->query("SELECT SUM(quantity) as `total` FROM `itransaction_items` WHERE product_id = '{$row['product_id']}'")->fetchArray()['total'];
 
                                             // Initialize stock_out for this product
                                             $stock_out = 0;
+                                            $ms_out1 = 0;
+                                            $ms_out2 = 0;
+                                            $qtyt = 0;
+                                            $ms_in = 0;
+                                            $number_of_sets = 0;
+                                            $remaining_quantity = 0;
 
                                             // Calculate stock out
-                                            $sql1 = "SELECT c.*, p.product_code as pcode FROM `product_list` p INNER JOIN `transaction_items` c ON p.product_id = c.product_id WHERE p.status = 1 ORDER BY `name` ASC";
+                                            $sql1 = "SELECT c.*, p.product_code as pcode FROM `product_list` p INNER JOIN `otransaction_items` c ON p.product_id = c.product_id WHERE p.status = 1 ORDER BY `name` ASC";
                                             $qry1 = $conn->query($sql1);
 
                                             while ($row1 = $qry1->fetchArray()) {
@@ -115,23 +122,46 @@
                                             $stock_out = $stock_out > 0 ? $stock_out : 0;
 
                                             // Calculate the remaining quantity
-                                            $qty = $stock_in - $stock_out;
+
                                             $details = getMainItemDetails($row['product_code']);
 
                                             if ($details['multiplier'] > 1) {
 
-                                                $qty = 1;
+                                                $ms_in = $conn->query("SELECT SUM(s.quantity) as `total` FROM `itransaction_items` s inner join product_list p on p.product_id = s.product_id  WHERE p.product_code = '{$details['main_id']}' and p.status = 1")->fetchArray()['total'];
+
+                                                $sql1 = "SELECT c.*, p.product_code as pcode FROM `product_list` p INNER JOIN `otransaction_items` c ON p.product_id = c.product_id WHERE p.status = 1 AND p.product_code LIKE '{$details['main_id']}%' ORDER BY `name` ASC";
+                                                $qry1 = $conn->query($sql1);
+
+                                                // Process the outgoing items
+                                                while ($row1 = $qry1->fetchArray()) {
+                                                    $detailsa = getMainItemDetails($row1['pcode']);
+
+                                                    if ($detailsa['multiplier'] > 1) {
+                                                        $ms_out1 += $detailsa['multiplier'] * $row1['quantity'];
+                                                    } else {
+                                                        $ms_out2 += $row1['quantity'];
+                                                    }
+                                                }
+
+                                                $remaining_quantity = $ms_in - ($ms_out1 + $ms_out2);
+
+                                                // Calculate the number of complete sets
+                                                $number_of_sets = intdiv($remaining_quantity, $details['multiplier']);
+
+                                                if (intdiv($ms_in - ($ms_out1 + $ms_out2), $details['multiplier']) < 1) {
+                                                    $qty = 0;
+                                                } else {
+                                                    $qty = intdiv($ms_in - ($ms_out1 + $ms_out2), $details['multiplier']);
+                                                }
                                             } else {
-                                                $qty = $qty > 0 ? $qty : 0;
+                                                $qty = $stock_in - $stock_out;
                                             }
-
-
 
                                         ?>
                                             <tr class="item <?php echo $qty < 50 ? "bg-danger bg-opacity-25" : '' ?>" data-id="<?php echo $row['product_id'] ?>">
                                                 <td class="td py-0 px-1 pname"><?php echo $row['cname'] ?></td>
                                                 <td class="td py-0 px-1 pcode"><?php echo $row['product_code'] ?></td>
-                                                <td class="td py-0 px-1 name"><?php echo $row['name'] ?></td>
+                                                <td class="td py-0 px-1 name"><?php echo $row['name'] . " " . $ms_in . " " . $ms_out1 . " " . $ms_out2 . " " . $number_of_sets . " " . $remaining_quantity ?></td>
                                                 <td class="td py-0 px-1 text-start price"><?php echo number_format($row['price'], 2) ?></td>
                                                 <td class="td py-0 px-1 text-start discount"><?php echo number_format($row['discount'], 2) ?></td>
                                                 <td class="td py-0 px-1 text-end qty"><?php echo $qty ?></td>
@@ -196,12 +226,12 @@
                                         <div class="flex-grow-1 bg-light fs-6 fw-bolder text-end px-2" id="t_profit" style="display: none">0.00</div>
                                         <!-- style="display: none" -->
                                     </div>
-                                    <div class="w-100 mx-0 d-flex pb-1">
+                                    <!-- <div class="w-100 mx-0 d-flex pb-1">
                                         <div class="col-4 pe-2 fs-6 fw-bolder text-light">Total</div>
                                         <div class="flex-grow-1 bg-light fs-6 fw-bolder text-end px-2" id="total">
                                             <php (total=total-t_discount) ?>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -213,7 +243,7 @@
             <input type="hidden" name="t_profit" value="0">
             <input type="hidden" name="s_desc" value="0">
             <input type="hidden" name="tendered_amount" value="0">
-            <input type="hidden" name="customer" value="0">
+            <input type="hidden" name="customer" value="cash">
             <input type="hidden" name="vehical_no" value="">
             <input type="hidden" name="change" value="0">
             <input type="hidden" name="arrears" value="0">
@@ -280,7 +310,7 @@
                     }) + '</span>)</div>' +
                     '</td>');
 
-                ntr.append('<td class="py-0 px-1 align-middle text-start total">' + (parseFloat(price) - parseFloat(discount)).toLocaleString('en-US', {
+                ntr.append('<td class="py-0 px-1 align-middle text-start total">' + parseFloat(price - discount).toLocaleString('en-US', {
                     style: 'decimal',
                     maximumFractionDigits: 2
                 }) + '</td>')
@@ -430,17 +460,21 @@
             val = $(this).text().replace(/,/gi, '')
             profit += parseFloat(val)
         })
-        $('[name="total"]').val(parseFloat(sub))
-        $('#total').text(parseFloat(sub).toLocaleString('en-US', {
-            style: 'decimal',
-            manimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }))
+
         $('#subTotal').text(parseFloat(sub).toLocaleString('en-US', {
             style: 'decimal',
             manimumFractionDigits: 2,
             maximumFractionDigits: 2
         }))
+
+        $('#total').text(parseFloat(sub).toLocaleString('en-US', {
+            style: 'decimal',
+            manimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }))
+
+        $('[name="total"]').val(parseFloat(sub))
+
         $('[name="t_discount"]').val(parseFloat(discount / 2))
         $('#t_discount').text(parseFloat(discount / 2).toLocaleString('en-US', {
             style: 'decimal',
