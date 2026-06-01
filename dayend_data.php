@@ -185,17 +185,17 @@
 
     while ($row = $qry->fetchArray()) {
         // Get total items for the transaction
-        $items = $conn->query("SELECT SUM(quantity) as `count` 
+        $items = floatval($conn->query("SELECT SUM(quantity) as `count` 
                        FROM `transaction_items` 
-                       WHERE transaction_id = '{$row['transaction_id']}'")->fetchArray()['count'];
+                       WHERE transaction_id = '{$row['transaction_id']}'")->fetchArray()['count']);
         $tot_item += $items;
         $gross_item_count += $items;
 
         // Aggregate item count and total amount based on payment type
         $payment_type = $row['customer'];
-        $transaction_total = $conn->query("SELECT SUM(price * quantity) as `total` 
+        $transaction_total = floatval($conn->query("SELECT SUM(price * quantity) as `total` 
                                    FROM `transaction_items` 
-                                   WHERE transaction_id = '{$row['transaction_id']}'")->fetchArray()['total'];
+                                   WHERE transaction_id = '{$row['transaction_id']}'")->fetchArray()['total']);
         $gross_total += $transaction_total;
 
 
@@ -210,19 +210,19 @@
         $payment_type_counts[$payment_type]['total_amount'] += $transaction_total;
 
         // Check for transaction discount (t_discount)
-        if ($row['t_discount'] > 0) {
+        if (floatval($row['t_discount']) > 0) {
             $t_discount_count++;
-            $t_discount_sum += $row['t_discount'];
+            $t_discount_sum += floatval($row['t_discount']);
         }
 
         // Check for special discount (s_desc)
-        if ($row['s_desc'] > 0) {
+        if (floatval($row['s_desc']) > 0) {
             $s_desc_count++;
-            $s_desc_sum += $row['s_desc'];
+            $s_desc_sum += floatval($row['s_desc']);
         }
 
         // Aggregate gross profit
-        $gross_profit_sum += $row['t_profit'];
+        $gross_profit_sum += floatval($row['t_profit']);
 
         $net_total = $gross_total - $t_discount_sum;
 

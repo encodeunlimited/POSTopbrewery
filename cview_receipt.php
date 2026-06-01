@@ -120,22 +120,22 @@ if (isset($_GET['id'])) {
             <tfoot>
                 <tr>
                     <th class="px-1 py-0 " colspan="3">Total Credit Amonut</th>
-                    <th class="px-1 py-0 text-end"><?php echo number_format($t_discount + $total, 2) ?></th>
+                    <th class="px-1 py-0 text-end"><?php echo number_format(floatval($t_discount) + floatval($total), 2) ?></th>
                 </tr>
                 <?php if ($t_discount != 0) : ?>
                     <tr>
                         <th class="px-1 py-0" colspan="3">Your Discount(-)</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($t_discount, 2) ?></th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format(floatval($t_discount), 2) ?></th>
                     </tr>
                 <?php endif; ?>
                 <?php if ($s_desc != 0) : ?>
                     <tr>
                         <th class="px-1 py-0" colspan="3">Special Discount(-)</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($s_desc, 2) ?></th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format(floatval($s_desc), 2) ?></th>
                     </tr>
                     <tr>
                         <th class="px-1 py-0" colspan="3">Total Credit Amonut</th>
-                        <th class="px-1 py-0 text-end"><?php echo number_format($total - $s_desc, 2) ?></th>
+                        <th class="px-1 py-0 text-end"><?php echo number_format(floatval($total) - floatval($s_desc), 2) ?></th>
                     </tr>
                 <?php endif; ?>
                 <!-- <tr>
